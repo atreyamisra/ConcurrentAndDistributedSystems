@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class PSort implements Callable<Void>{
-      public static ExecutorService threadPool = Executors.newCachedThreadPool();
+	  public static ExecutorService threadPool = Executors.newCachedThreadPool();
 	  int n;
 	  public PSort(int A[], int begin, int end){
 		  this.A = A;
@@ -15,14 +15,13 @@ public class PSort implements Callable<Void>{
 	  int A[], begin, end, index;
 	  
 		public static void parallelSort(int[] A, int begin, int end){
-			threadPool = Executors.newCachedThreadPool();
 			PSort start = new PSort(A, begin, end);
 	    	Future<Void> s = threadPool.submit(start);
 	    	try{
 	    		s.get();
 	    	}
 	    	catch (Exception e) { System.err.println (e);}
-	        threadPool.shutdown();
+//	        threadPool.shutdown();
 		}
 		
 	  public Void call() {
