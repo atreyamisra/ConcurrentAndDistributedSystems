@@ -23,7 +23,7 @@ public class PSort implements Callable<Void>{
 	    	}
 	    	catch (Exception e) { System.err.println (e);}
 	        //es.shutdown ();
-	        threadPool.shutdown();
+	        //threadPool.shutdown();
 		}
 		
 	  public Void call() {

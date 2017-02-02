@@ -15,14 +15,14 @@ public class PSort implements Callable<Void>{
 	  int A[], begin, end, index;
 	  
 		public static void parallelSort(int[] A, int begin, int end){
-			//ExecutorService es = Executors.newSingleThreadExecutor();
+			ExecutorService es = Executors.newSingleThreadExecutor();
 			PSort start = new PSort(A, begin, end);
 	    	Future<Void> s = threadPool.submit(start);
 	    	try{
 	    		s.get();
 	    	}
 	    	catch (Exception e) { System.err.println (e);}
-	        //es.shutdown ();
+	        es.shutdown ();
 	        threadPool.shutdown();
 		}
 		
