@@ -15,18 +15,22 @@ public class PSort implements Callable<Void>{
 	  int A[], begin, end, index;
 	  
 		public static void parallelSort(int[] A, int begin, int end){
+			//ExecutorService es = Executors.newSingleThreadExecutor();
 			PSort start = new PSort(A, begin, end);
 	    	Future<Void> s = threadPool.submit(start);
 	    	try{
 	    		s.get();
 	    	}
 	    	catch (Exception e) { System.err.println (e);}
-//	        threadPool.shutdown();
+	        //es.shutdown ();
+	        threadPool.shutdown();
 		}
 		
 	  public Void call() {
 	    try {
+//	    	String newLine = System.getProperty("line.separator");
 	    	int index = partition(A, begin, end);
+//	        System.out.print("hi");
 		    if(end - begin < 4){
 		    	int b = begin;
 		    	int e = end - 1;

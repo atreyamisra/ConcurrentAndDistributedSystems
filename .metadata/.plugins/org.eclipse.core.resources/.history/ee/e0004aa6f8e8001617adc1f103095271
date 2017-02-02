@@ -21,7 +21,7 @@ public class PSort implements Callable<Void>{
 	    		s.get();
 	    	}
 	    	catch (Exception e) { System.err.println (e);}
-//	        threadPool.shutdown();
+	        threadPool.shutdown();
 		}
 		
 	  public Void call() {
