@@ -36,9 +36,12 @@ public class PSort implements Callable<Void>{
 		    		if ((b + 1) == A.length) return null;
 		    		value = A[b + 1];
 		    		int j = b;
+		    		
 		    		while(j>=(begin-1) && A[j] > value){
 		    			A[j+1] = A[j];
 		    			j = j - 1;
+		    			if(j == -1)
+		    				break;
 		    		}
 		    		A[j+1] = value;		
 		    	}
@@ -56,9 +59,14 @@ public class PSort implements Callable<Void>{
 		    	}
 	    	try{
 	    		l.get();
+	    	}
+	    	catch (Exception e) { //System.err.println (e);
+	    	int sriram = 1;}
+	    	try{
 	    		r.get();
 	    	}
-	    	catch (Exception e) { System.err.println (e);}
+	    	catch (Exception e) { System.err.println (e);
+	    	int sriram = 1;}
 		    
 	       return null;
 	    } catch (Exception e) { System.err.println (e); return null;}
