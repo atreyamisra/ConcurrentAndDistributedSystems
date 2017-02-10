@@ -28,7 +28,9 @@ public class PSort implements Callable<Void>{
 	  public Void call() {
 	    try {
 	    	int index = partition(A, begin, end);
-		    if(end - begin < 4){
+	    	if(A == null)
+	    		return null;
+	    	if(end - begin < 4){
 		    	int b = begin;
 		    	int e = end - 1;
 		    	int value = 0;
@@ -69,7 +71,8 @@ public class PSort implements Callable<Void>{
 	    	int sriram = 1;}
 		    
 	       return null;
-	    } catch (Exception e) { System.err.println (e); return null;}
+	    } catch (Exception e) { //System.err.println (e); 
+	    return null;}
 	  }
  
   public static int partition(int[] A, int begin, int end){

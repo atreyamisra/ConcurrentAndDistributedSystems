@@ -16,9 +16,12 @@ public class SimpleTest {
     
     int[] A4 = {4, 9, 69, 3, 3, 7, 13, 0, 0, 9, 15, 13, 19};
     verifyParallelSort(A4);
-    
-    int[] A5=arrayMaker(50);
-    verifyParallelSort(A5);
+    for(int i = 0; i < 10; i++){ 
+    	int[] A5=arrayMaker(i);
+        verifyParallelSort(A5);
+    } 
+    int[] A7 = {};
+    verifyParallelSort(A7);
   }
   public static int[] arrayMaker(int n){
 	  
@@ -47,6 +50,7 @@ public class SimpleTest {
         printArray(A);
         System.out.println("Your results:");
         printArray(B);
+        System.out.println("Your mistake is at index " + i + " with elements that should match that don't are " + A[i] + " and " +B[i]);
         isSuccess = false;
         break;
       }
