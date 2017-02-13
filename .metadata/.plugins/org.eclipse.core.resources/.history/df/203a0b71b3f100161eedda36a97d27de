@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore; // for implementation using Semaphores
 public class CyclicBarrier {
 	private Semaphore s;
 	private Semaphore lock;
-	private volatile int numWaiting;
+	private  int numWaiting;
 	private int parties;
 	private int houseParty;
 	

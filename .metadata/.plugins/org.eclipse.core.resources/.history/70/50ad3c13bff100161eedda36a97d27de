@@ -12,16 +12,23 @@ public class Garden {
     int holesFilled = 0;
 	public Garden() {   }; 
 	public void startDigging() {
-		if(holesDug != 0){
-			try {
-				newtonHasShovel.await();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		lock.lock();
+		try{
+			if(holesDug != 0){
+				try {
+					newtonHasShovel.await();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			while((holesDug == seedsFilled + 4) || (seedsFilled == holesFilled + 8)){
+				maryHasShovel.signal();
 			}
 		}
-		while((holesDug == seedsFilled + 4) || (seedsFilled == holesFilled + 8)){
-			maryHasShovel.signal();
+		finally{
+			lock.unlock();
 		}
 	}; 
 	public void doneDigging() {
