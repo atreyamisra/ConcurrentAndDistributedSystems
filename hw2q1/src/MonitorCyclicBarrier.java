@@ -23,12 +23,11 @@ public class MonitorCyclicBarrier {
 	// (parties - 1) indicates the first to arrive and zero indicates
 	// the last to arrive.
 	public synchronized int await() throws InterruptedException {
+		while(index == -1)
+			wait();	
 		int myIndex = index; //assign this thread the current index
         index--; //decrement the index when a new thread enters
-		
-        if(index == -1) //if the latest thread to arrive fulfills the quota, wake all the threads and reset the counter
-        	notifyAll();
-        
+
         while(index != -1)
         	wait();
          
@@ -38,6 +37,7 @@ public class MonitorCyclicBarrier {
         	numReleased = 0;
         	index = barrierNum-1;
         }
+        notifyAll(); 
 	    return myIndex;
 	}
 }
