@@ -1,0 +1,87 @@
+/*
+ * EID's of group members
+ * 
+ */
+import java.util.concurrent.Semaphore; // for implementation using Semaphores
+
+public class CyclicBarrier {
+	private Semaphore s;
+	private Semaphore lock;
+	private int numWaiting = 0;
+	private int parties;
+	private int houseParty = 0;
+	
+	
+	
+	public CyclicBarrier(int parties) {
+		this.parties = parties;
+		s = new Semaphore(parties);
+		lock = new Semaphore(1);
+	}
+	
+	public int await() throws InterruptedException {		
+		s.acquire();
+		lock.acquire();
+		numWaiting++;
+		int myIndex = parties - numWaiting;
+		lock.release();
+		while(numWaiting != parties){
+			Thread.yield();
+		}
+		lock.acquire();
+		houseParty++;
+		if(houseParty==parties){
+			s.release(parties);
+			houseParty=0;
+			numWaiting=0;
+		}
+		lock.release();
+	    return myIndex;
+	}
+}
+
+/*
+ * EID's of group members
+ * 
+ */
+/*import java.util.concurrent.Semaphore; // for implementation using Semaphores
+
+public class CyclicBarrier {
+	int parties;
+	int thRunning=0;
+	int thDone=0;
+	Semaphore cyclicSemaphore;
+	Semaphore writingLock;
+
+	public CyclicBarrier(int parties) {
+		this.parties=parties;
+		cyclicSemaphore=new Semaphore(parties);
+		writingLock=new Semaphore(1);
+	}
+	
+	public int await() throws InterruptedException {
+		//Thread.sleep((int)Math.random()*10);
+      cyclicSemaphore.acquire();
+     // Thread.sleep((int)Math.random()*10);
+      writingLock.acquire();
+      thRunning++;
+      int ret=parties-thRunning;
+      writingLock.release();
+     // Thread.sleep((int)Math.random()*10);
+      while(thRunning!=parties){
+    	  Thread.yield();
+      }
+     // Thread.sleep((int)Math.random()*10);
+      writingLock.acquire();
+      thDone++;
+      if(thDone==parties){
+    	  cyclicSemaphore.release(parties);
+    	  thDone=0;
+    	  thRunning=0;
+      }
+      writingLock.release();
+     //Thread.sleep((int)Math.random()*10);
+      return ret;
+	}
+}
+*/

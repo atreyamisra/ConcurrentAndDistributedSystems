@@ -1,0 +1,44 @@
+/*
+ * EID's of group members
+ * 
+ */
+import java.util.concurrent.Semaphore; // for implementation using Semaphores
+
+public class CyclicBarrier {
+	private int index;
+	private Semaphore s;
+	private Semaphore lock;
+	private int numWaiting;
+	private int parties;
+	private int houseParty;
+	
+	
+	
+	public CyclicBarrier(int parties) {
+		this.parties = parties;
+		s = new Semaphore(parties);
+		lock = new Semaphore(1);
+		numWaiting = 0;
+		// Creates a new CyclicBarrier that will trip when
+		// the given number of parties (threads) are waiting upon it
+	}
+	
+	public int await() throws InterruptedException {		
+		s.acquire();
+		lock.acquire();
+		numWaiting++;
+		int myIndex = parties - numWaiting;
+		lock.release();
+		while(numWaiting != parties){}
+		lock.acquire();
+		houseParty++;
+		if(houseParty==parties){
+			System.out.println("all released");
+			s.release(parties);
+			houseParty=0;
+			numWaiting=0;
+		}
+		lock.release();
+	    return myIndex;
+	}
+}

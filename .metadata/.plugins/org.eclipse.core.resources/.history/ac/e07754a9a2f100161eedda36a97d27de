@@ -1,0 +1,52 @@
+/*
+ * EID's of group members
+ * 
+ */
+import java.util.concurrent.Semaphore; // for implementation using Semaphores
+
+public class CyclicBarrier {
+	private int index;
+	private Semaphore s;
+	private Semaphore lock;
+	private int numWaiting;
+	private int parties;
+	private int houseParty;
+	
+	
+	
+	public CyclicBarrier(int parties) {
+		s = new Semaphore(5);
+		lock = new Semaphore(1);
+		index = parties - 1;
+		numWaiting = 0;
+		// Creates a new CyclicBarrier that will trip when
+		// the given number of parties (threads) are waiting upon it
+	}
+	
+	public int await() throws InterruptedException {		
+		s.acquire();
+		lock.acquire();
+		numWaiting++;
+		int myIndex = index;
+		lock.release();
+		while(numWaiting != parties){}
+		lock.acquire();
+		houseParty++;
+		lock.release();
+		
+		//while(s.availablePermits() != 0) s.acquire();
+		
+		// Waits until all parties have invoked await on this barrier.
+		// If the current thread is not the last to arrive then it is
+		// disabled for thread scheduling purposes and lies dormant until
+		// the last thread arrives.
+		// Returns: the arrival index of the current thread, where index
+		// (parties - 1) indicates the first to arrive and zero indicates
+		// the last to arrive.   
+		
+		
+		
+          // you need to write this code
+	    return myIndex;
+	}
+}
