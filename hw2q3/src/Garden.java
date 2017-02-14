@@ -7,42 +7,63 @@ public class Garden {
 	final Condition diggingStarted = lock.newCondition();
 	final Condition maryHasShovel = lock.newCondition();
 	final Condition newtonHasShovel = lock.newCondition();
+	boolean shovel = true;
 	int holesDug = 0;
     int seedsFilled = 0;
     int holesFilled = 0;
-	public Garden() {   }; 
+	public Garden() {
+	}; 
 	public void startDigging() {
-		if(holesDug != 0){
-			try {
-				newtonHasShovel.await();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		lock.lock();
+		try{
+			if(!shovel){
+				try {
+					newtonHasShovel.await();
+					shovel = true;
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			while((holesDug == seedsFilled + 4) || (seedsFilled == holesDug + 8)){
+				try {
+					newtonHasShovel.await();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-		while((holesDug == seedsFilled + 4) || (seedsFilled == holesFilled + 8)){
-			maryHasShovel.signal();
-		}
+		finally{
+			lock.unlock();
+		}		
 	}; 
 	public void doneDigging() {
 		lock.lock();
 		try{
 			holesDug++;
+			maryHasShovel.signal();
+			diggingStarted.signal();
 		}
 		finally{
 			lock.unlock();
 		}
-		maryHasShovel.signal();
-		diggingStarted.signal();
 	}; 
 	public void startSeeding() {
-		while(seedsFilled == holesDug);
-		try {
-			diggingStarted.await();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		lock.lock();
+		try{
+			while(seedsFilled == holesDug){
+				try {
+					diggingStarted.await();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
+		finally{
+			lock.unlock();
+		}		
 	};
 	public void doneSeeding() {
 		lock.lock();
@@ -54,23 +75,31 @@ public class Garden {
 		}
 	}; 
 	public void startFilling() {
-		while(seedsFilled == holesFilled);
-		try {
-			newtonHasShovel.await();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		lock.lock();
+		try{
+			shovel = false;
+			while(seedsFilled == holesFilled){
+				try {
+					newtonHasShovel.await();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		finally{
+			lock.unlock();
 		}
 	}; 
 	public void doneFilling() {
 		lock.lock();
 		try{
 			holesFilled++;
+			newtonHasShovel.signal();
 		}
 		finally{
 			lock.unlock();
 		}
-		newtonHasShovel.signal();
 	}; 
  
     /*
