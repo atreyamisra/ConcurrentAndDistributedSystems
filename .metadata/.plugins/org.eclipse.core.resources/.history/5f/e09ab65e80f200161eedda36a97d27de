@@ -14,17 +14,11 @@ public class CyclicBarrier {
 	
 	
 	
-	public CyclicBarrier(int parties){
+	public CyclicBarrier(int parties) {
 		this.parties = parties;
 		s = new Semaphore(parties);
 		lock = new Semaphore(1);
 		next = new Semaphore(parties);
-		try {
-			next.acquire(parties);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		numWaiting = 0;
 		houseParty = 0;
 	}

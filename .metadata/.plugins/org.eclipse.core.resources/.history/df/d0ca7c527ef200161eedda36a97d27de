@@ -5,35 +5,35 @@ public class TestPranav1 extends MultithreadedTestCase{
 
 	
 	
-//	public void thread1() throws InterruptedException {
-//		waitForTick(1);
-//		Run.lock.beginRead();
-//		waitForTick(2);
-//		Run.lock.endRead();
-//	}
-//	
-//	public void thread2() throws InterruptedException {
-//		waitForTick(1);
-//		Run.lock.beginRead();
-//		assertTick(1);
-//		waitForTick(3);
-//		Run.lock.endRead();
-//	}
-//	public void thread3() throws InterruptedException {
-//		waitForTick(2);
-//		Run.lock.beginWrite();
-//		assertTick(3);
-//		waitForTick(4);
-//		Run.lock.endWrite();
-//	}
-//	public void thread4() throws InterruptedException {
-//		waitForTick(3);
-//		Run.lock.beginRead();
-//		assertTick(4);
-//		waitForTick(5);
-//		Run.lock.endRead();
-//		
-//	}
+	public void thread1() throws InterruptedException {
+		waitForTick(1);
+		Run.lock.beginRead();
+		waitForTick(2);
+		Run.lock.endRead();
+	}
+	
+	public void thread2() throws InterruptedException {
+		waitForTick(1);
+		Run.lock.beginRead();
+		assertTick(1);
+		waitForTick(3);
+		Run.lock.endRead();
+	}
+	public void thread3() throws InterruptedException {
+		waitForTick(2);
+		Run.lock.beginWrite();
+		assertTick(3);
+		waitForTick(4);
+		Run.lock.endWrite();
+	}
+	public void thread4() throws InterruptedException {
+		waitForTick(3);
+		Run.lock.beginRead();
+		assertTick(4);
+		waitForTick(5);
+		Run.lock.endRead();
+		
+	}
 	public void thread5() throws InterruptedException {
 		waitForTick(4);
 		Run.lock.beginWrite();
@@ -62,7 +62,7 @@ public class TestPranav1 extends MultithreadedTestCase{
 		Run.lock.endRead();
 		
 	}
-	public void thread9() throws InterruptedException {
+/*	public void thread9() throws InterruptedException {
 		waitForTick(5);
 		Run.lock.beginRead();
 		waitForTick(6);
@@ -70,6 +70,6 @@ public class TestPranav1 extends MultithreadedTestCase{
 		
 		
 	}
-	
+*/	
 	
 }
