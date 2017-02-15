@@ -1,6 +1,6 @@
 /*
- * am73676_sr39533
- * 
+ * Sriram Ravula - sr39533
+ * Atreya Misra - am73676
  */
 
 public class MonitorCyclicBarrier {
@@ -23,7 +23,7 @@ public class MonitorCyclicBarrier {
 	// (parties - 1) indicates the first to arrive and zero indicates
 	// the last to arrive.
 	public synchronized int await() throws InterruptedException {
-		while(index == -1)
+		while(index == -1) //if a new thread enter while others are trying to leave, wait
 			wait();	
 		int myIndex = index; //assign this thread the current index
         index--; //decrement the index when a new thread enters
