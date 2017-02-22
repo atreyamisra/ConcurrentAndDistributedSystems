@@ -26,7 +26,7 @@ public class Garden {
 					e.printStackTrace();
 				}
 			}
-			while((holesDug == seedsFilled + 4) || (seedsFilled == holesDug + 8)){
+			while((holesDug == seedsFilled + 4) || (holesDug == holesFilled + 8)){
 				try {
 					newtonHasShovel.await();
 				} catch (InterruptedException e) {
@@ -43,6 +43,7 @@ public class Garden {
 		lock.lock();
 		try{
 			holesDug++;
+			System.out.println("Dug: " + holesDug);
 			maryHasShovel.signal();
 			diggingStarted.signal();
 		}
@@ -70,6 +71,7 @@ public class Garden {
 		lock.lock();
 		try{
 			seedsFilled++;
+			System.out.println("Seeded: " + seedsFilled);
 		}
 		finally{
 			lock.unlock();
@@ -81,7 +83,7 @@ public class Garden {
 			shovel = false;
 			while(seedsFilled == holesFilled){
 				try {
-					newtonHasShovel.await();
+					maryHasShovel.await();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -96,6 +98,7 @@ public class Garden {
 		lock.lock();
 		try{
 			holesFilled++;
+			System.out.println("Filled: " + holesFilled);
 			newtonHasShovel.signal();
 		}
 		finally{
