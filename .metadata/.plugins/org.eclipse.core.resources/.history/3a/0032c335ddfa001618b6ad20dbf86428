@@ -1,9 +1,13 @@
 import java.io.*;
 import java.util.*;
 import java.net.*;
-public class Server {
+public class Server extends Thread {
     private static Hashtable<String, Integer> items = new Hashtable<String, Integer>();
+	Socket theClient;
 	private static boolean tcpOn = true;
+    public Server(Socket s){
+    	theClient = s;	
+    }
   public static void main (String[] args) {
     int tcpPort;
     int udpPort;
@@ -49,6 +53,7 @@ public class Server {
     // parse the inventory file
 
     // TODO: handle request from clients
+	System.out.println("IDK started:");
 	try {
 		int port = tcpPort;
 		if(!tcpOn)
@@ -56,12 +61,28 @@ public class Server {
 		ServerSocket listener = new ServerSocket(port);
 		Socket s;
 		while ( (s = listener.accept()) != null) {
-			Thread t = new MultithreadedServer(s);
+			Thread t = new Server(s);
 			t.start();
 		}
 	} catch (IOException e) {
 		System.err.println("Server aborted:" + e);
 	}
+  }
+  public void run(){
+	  try{
+		  InputStream input = theClient.getInputStream();
+		  OutputStream output = theClient.getOutputStream();
+		  PrintStream printStream = new PrintStream(output);
+		  InputStreamReader inputStream = new InputStreamReader(input);
+		  BufferedReader bufferedReader = new BufferedReader(inputStream);
+		  String message = null;
+		  message = bufferedReader.readLine();
+		  //implement methods that take the input of the message
+		  
+	  }
+	  catch(Exception e){
+		  System.err.println(e);
+	  }
   }
   public synchronized void increaseInventory(String product){
 	  int count = items.get(product);
