@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 public class Server {
-    public static Hashtable<String, Integer> items = new Hashtable<String, Integer>();
-    public static boolean tcpOn = true;
+    private static Hashtable<String, Integer> items = new Hashtable<String, Integer>();
+	private static boolean tcpOn = true;
   public static void main (String[] args) {
     int tcpPort;
     int udpPort;
@@ -63,5 +63,20 @@ public class Server {
 		System.err.println("Server aborted:" + e);
 	}
   }
-
+  public synchronized void increaseInventory(String product){
+	  int count = items.get(product);
+	  count++;
+	  items.put(product, count);
+  }
+  public synchronized void decreaseInventory(String product){
+	  int count = items.get(product);
+	  count--;
+	  items.put(product, count);
+  }
+  public synchronized void changePort(){
+	  if(!tcpOn)
+		  tcpOn = true;
+	  else
+		  tcpOn = false;
+  }
 }

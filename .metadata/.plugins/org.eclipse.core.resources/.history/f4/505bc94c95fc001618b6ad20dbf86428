@@ -63,7 +63,6 @@ public class Client {
       if (tokens[0].equals("setmode")) {
         if(tokens[1].equals("T")){
         	tcpOn = true;
-        	printStream.println(output);
         }	
         else{
         	tcpOn = false;

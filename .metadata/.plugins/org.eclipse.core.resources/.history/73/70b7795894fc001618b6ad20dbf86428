@@ -63,7 +63,6 @@ public class Client {
       if (tokens[0].equals("setmode")) {
         if(tokens[1].equals("T")){
         	tcpOn = true;
-        	printStream.println(output);
         }	
         else{
         	tcpOn = false;
@@ -129,31 +128,7 @@ public class Client {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-	    	int n = Integer.valueOf(message);
-	    	for(int i = 0; i<n; i++){
-		    	try {
-					message = bufferedReader.readLine();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		    	interpretMessage(message);
-	    	}	
-	  	}
-	  	else if(action.equals("search")){
-	    	try {
-				message = bufferedReader.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	    	int n = Integer.valueOf(message);
-	    	for(int i = 0; i<n; i++){
-		    	try {
-					message = bufferedReader.readLine();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		    	interpretMessage(message);
-	    	}
+	    	interpretMessage(message);
 	  	}
 	  		
 

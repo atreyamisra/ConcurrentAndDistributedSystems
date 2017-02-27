@@ -16,7 +16,7 @@ public class MultithreadedServer extends Thread{
     }
     public void run(){
   	  try{
-  		  InputStream input = theClient.getInputStream();
+  		InputStream input = theClient.getInputStream();
 		  OutputStream output = theClient.getOutputStream();
 		  PrintStream printStream = new PrintStream(output);
 		  InputStreamReader inputStream = new InputStreamReader(input);
