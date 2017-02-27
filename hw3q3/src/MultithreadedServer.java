@@ -28,15 +28,12 @@ public class MultithreadedServer extends Thread{
   			  printStream.println(response);
     		  message = bufferedReader.readLine();
   		  }
-  		  
-  		  //implement methods that take the input of the message
-  		  
   	  }
   	  catch(Exception e){
   		  System.err.println(e);
   	  }
     }
-    private String processMessage(String m){
+    public static String processMessage(String m){
     	String[] n = m.split(" ");
     	if(n[0].equals("setmode")){
     		
@@ -60,7 +57,7 @@ public class MultithreadedServer extends Thread{
     			return "Order " + n[1] + " is canceled";
     		}
     		else
-    			return n[1] + "not found, no such order";
+    			return n[1] + " not found, no such order";
     		
     	}
     	else if(n[0].equals("search")){
@@ -85,13 +82,12 @@ public class MultithreadedServer extends Thread{
     	}
     	return m;
     }
-    public synchronized boolean increaseInventory(String product, int amount){
+    public synchronized static void increaseInventory(String product, int amount){
     	int count = items.get(product);
   	  	count+=amount;
   	  	items.put(product, count);
-  	  	return true;
     }
-    public synchronized int decreaseInventory(String product, int amount){
+    public synchronized static int decreaseInventory(String product, int amount){
     	if(items.get(product)==null)
     		return 2;
     	else if(amount>items.get(product))

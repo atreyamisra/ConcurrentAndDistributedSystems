@@ -50,10 +50,10 @@ public class Client {
 		e1.printStackTrace();
 	}
   	
-    PrintStream printStream = new PrintStream(output);
-  	InputStreamReader inputStream = new InputStreamReader(input);
-  	BufferedReader bufferedReader = new BufferedReader(inputStream);
-  	String message = null;
+    printStream = new PrintStream(output);
+  	inputStream = new InputStreamReader(input);
+  	bufferedReader = new BufferedReader(inputStream);
+  	message = null;
 
     Scanner sc = new Scanner(System.in);
     while(sc.hasNextLine()) {
