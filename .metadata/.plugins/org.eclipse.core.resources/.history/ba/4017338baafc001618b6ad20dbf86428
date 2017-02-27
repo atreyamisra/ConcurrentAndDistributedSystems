@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 public class udpServerThread implements Runnable{
-	private static int udpPort;
+	private int udpPort;
 	public udpServerThread(int port){
 		udpPort = port;
 	}
@@ -15,7 +15,7 @@ public class udpServerThread implements Runnable{
 	        while (true) {
 	          try {
 	        		  datapacket = new DatagramPacket (buf, buf.length); 
-	        		  datasocket.receive(datapacket);
+	        		  datasocket.receive (datapacket);
 	        		  String message = new String(datapacket.getData());
 	        		  InetAddress sender=datapacket.getAddress();
 	        		  int senderPort=datapacket.getPort();

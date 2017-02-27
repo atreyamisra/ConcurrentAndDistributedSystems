@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 public class udpServerThread implements Runnable{
-	private static int udpPort;
+	private int udpPort;
 	public udpServerThread(int port){
 		udpPort = port;
 	}
