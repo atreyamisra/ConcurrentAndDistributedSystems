@@ -15,6 +15,7 @@ public class Client {
     private static InetAddress ia;
     private static DatagramSocket datasocket;
     private final static int len = 65507;
+    //private static BufferedReader stdinp;
 	
   public static void main (String[] args) {
     String hostAddress;

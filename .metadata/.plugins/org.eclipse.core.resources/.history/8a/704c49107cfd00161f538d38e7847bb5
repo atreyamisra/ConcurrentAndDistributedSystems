@@ -37,7 +37,7 @@ public class MultithreadedServer extends Thread{
     	m = m.trim();
     	String[] n = m.split(" ");
     	if(n[0].equals("purchase")){
-    		int state = editInventory(n[2],Integer.valueOf(n[3]), true);
+    		int state = decreaseInventory(n[2],Integer.valueOf(n[3]));
 			if(state == 0){
 				Order o = new Order(n[1],n[2],Integer.valueOf(n[3]));
 				ol.add(o);
@@ -51,7 +51,7 @@ public class MultithreadedServer extends Thread{
     	else if(n[0].equals("cancel")){
     		Order o = ol.cancel(Integer.valueOf(n[1]));
     		if(o!=null){
-    			editInventory(o.getProduct(), o.getQuantity(), false);
+    			increaseInventory(o.getProduct(), o.getQuantity());
     			return "Order " + n[1] + " is canceled";
     		}
     		else
@@ -80,22 +80,19 @@ public class MultithreadedServer extends Thread{
     	}
     	return m;
     }
-    private synchronized static int editInventory(String product, int amount, boolean decrease){
-    	if(decrease){
-        	if(items.get(product)==null)
-        		return 2;
-        	else if(amount>items.get(product))
-      	  		return 1;
-      	  	int count = items.get(product);
-      	  	count-=amount;
-      	  	items.put(product, count);
-      	  	return 0;
-    	}
-    	else{
-    		int count = items.get(product);
-      	  	count+=amount;
-      	  	items.put(product, count);
-    		return 0;
-    	}
+    private synchronized static void increaseInventory(String product, int amount){
+    	int count = items.get(product);
+  	  	count+=amount;
+  	  	items.put(product, count);
+    }
+    private synchronized static int decreaseInventory(String product, int amount){
+    	if(items.get(product)==null)
+    		return 2;
+    	else if(amount>items.get(product))
+  	  		return 1;
+  	  	int count = items.get(product);
+  	  	count-=amount;
+  	  	items.put(product, count);
+  	  	return 0;
     }
 }
