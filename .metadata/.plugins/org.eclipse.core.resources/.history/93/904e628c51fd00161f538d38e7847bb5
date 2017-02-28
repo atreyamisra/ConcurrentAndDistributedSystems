@@ -198,6 +198,7 @@ public class Client {
 
   }
   private static void udpMethod(String output, String action, int port){
+	  	output = String.valueOf(output.length() + " " + output);
 		byte [] buffer = new byte[output.length()]; 
 		buffer = output.getBytes();
 		sPacket = new DatagramPacket (buffer, buffer.length , ia, port); 
