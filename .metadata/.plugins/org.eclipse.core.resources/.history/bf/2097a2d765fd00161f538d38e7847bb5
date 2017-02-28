@@ -1,0 +1,13 @@
+//am73676_sr39533
+import java.io.*;
+import java.util.*;
+import java.net.*;
+public class udpMultithreading extends Thread{
+	private DatagramPacket datapacket;
+	public udpMultithreading(DatagramPacket packet){
+		datapacket = packet;
+	}
+	public void run(){
+		
+	}
+}

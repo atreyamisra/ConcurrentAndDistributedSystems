@@ -16,8 +16,15 @@ public class udpServerThread extends Thread{
 	        	  	  buf = new byte[len];
 	        		  datapacket = new DatagramPacket (buf, buf.length); 
 	        		  datasocket.receive(datapacket);
-	        		  udpMultithreading send = new udpMultithreading(datapacket, datasocket);
-	        		  send.start();
+	        		  Thread init = new udpServerThread();
+	        		  init.start();
+	        		  String message = new String(datapacket.getData());
+	        		  InetAddress sender=datapacket.getAddress();
+	        		  int senderPort=datapacket.getPort();
+	        		  String response = MultithreadedServer.processMessage(message);
+	        		  byte[] responseBytes=response.getBytes();
+	        		  DatagramPacket sendPack=new DatagramPacket(responseBytes, responseBytes.length, sender, senderPort);
+	        		  datasocket.send(sendPack);
 	                 } catch (IOException e) {
 	                	 System.err.println(e); 
 	               } 
