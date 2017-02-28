@@ -1,0 +1,97 @@
+import java.io.*;
+import java.util.*;
+import java.net.*;
+public class udpServerThread extends Thread{
+	private static int udpPort = Server.udpPort;
+	private DatagramSocket datasocket;
+	private DatagramPacket datapacket;
+	public void run(){
+	    try {
+	    	datasocket = new DatagramSocket(udpPort);
+	    	int len = 65507;
+	    	byte[] buf = new byte[len];
+	        while (true) {
+	          try {
+	        		  datapacket = new DatagramPacket (buf, buf.length); 
+	        		  datasocket.receive(datapacket);
+	        		  String message = new String(datapacket.getData());
+	        		  System.out.println(message);
+	        		  InetAddress sender=datapacket.getAddress();
+	        		  int senderPort=datapacket.getPort();
+	        		  String response = processMessage(message);
+	        		  byte[] responseBytes=response.getBytes();
+	        		  DatagramPacket sendPack=new DatagramPacket(responseBytes, responseBytes.length, sender, senderPort);
+	        		  datasocket.send(sendPack);
+	                 } catch (IOException e) {
+	                	 System.err.println(e); 
+	               } 
+	        	}
+	        }
+	        catch (SocketException se) {
+	            System.err.println (se); 
+	        }
+	}
+    private static String processMessage(String m){
+    	String[] n = m.split(" ");
+    	if(n[0].equals("purchase")){
+    		//System.out.println("what's happening");
+    		//System.out.println(n[3]);
+    		int state = decreaseInventory(n[2],Integer.valueOf(n[3]));
+			if(state == 0){
+				Order o = new Order(n[1],n[2],Integer.valueOf(n[3]));
+				MultithreadedServer.ol.add(o);
+				return "Your order has been placed, " + o.getId() + " " + n[1] +" " + n[2] + " " + n[3];
+			}	
+    		else if(state == 1)
+    			return "Not Available - Not enough items";
+    		else if(state == 2)
+    			return "Not Available - We do not sell this product";
+    	}
+    	else if(n[0].equals("cancel")){
+    		Order o = MultithreadedServer.ol.cancel(Integer.valueOf(n[1]));
+    		if(o!=null){
+    			increaseInventory(o.getProduct(), o.getQuantity());
+    			return "Order " + n[1] + " is canceled";
+    		}
+    		else
+    			return n[1] + " not found, no such order";
+    		
+    	}
+    	else if(n[0].equals("search")){
+    		ArrayList<Order> a = MultithreadedServer.ol.search(n[1]);
+    		if(a.isEmpty())
+    			return "No orders found for " + n[1];
+    		else{
+    			return String.valueOf(a.size())+ "\n" + MultithreadedServer.ol.ordersToString(a);
+    		}
+    			
+    	}
+    	else if(n[0].equals("list")){
+    		String s = "";
+    		int lines = 0;
+    		Set<String> keys = MultithreadedServer.items.keySet();
+    		for(String a: keys){
+    			s+= a + " " + MultithreadedServer.items.get(a) + "\n";
+    			lines++;
+    		}
+    		s=String.valueOf(lines) +"\n" + s.trim();
+    		return s;
+    	}
+    	return m;
+    }
+    private synchronized static void increaseInventory(String product, int amount){
+    	int count = MultithreadedServer.items.get(product);
+  	  	count+=amount;
+  	  	MultithreadedServer.items.put(product, count);
+    }
+    private synchronized static int decreaseInventory(String product, int amount){
+    	if(items.get(product)==null)
+    		return 2;
+    	else if(amount>MultithreadedServer.items.get(product))
+  	  		return 1;
+  	  	int count = MultithreadedServer.items.get(product);
+  	  	count-=amount;
+  	  	MultithreadedServer.items.put(product, count);
+  	  	return 0;
+    }
+}

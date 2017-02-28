@@ -95,10 +95,12 @@ public class Client {
 
         	//printStream.println(output);
         }	
-        else{
+        else if(tokens[1].equals("U")){
         	tcpOn = false;
         	System.out.println("UDP");
         }
+        else
+        	System.out.println("ERROR: No such command");
         	
     	  // TODO: set the mode of communication for sending commands to the server 
         // and display the name of the protocol that will be used in future
@@ -196,7 +198,7 @@ public class Client {
 
   }
   private static void udpMethod(String output, String action, int port){
-	  	//printStream.println(output);
+	  	output = String.valueOf(output.length() + " " + output);
 		byte [] buffer = new byte[output.length()]; 
 		buffer = output.getBytes();
 		sPacket = new DatagramPacket (buffer, buffer.length , ia, port); 
@@ -238,6 +240,7 @@ public class Client {
 				e1.printStackTrace();
 			}
 			String message = new String (rPacket.getData(), 0, rPacket.getLength());
+			message = message.substring(message.indexOf("\n") + 1);
 	    	interpretMessage(message);
 	  	}
 	  	else if(action.equals("list")){
@@ -249,6 +252,7 @@ public class Client {
 				e1.printStackTrace();
 			}
 			String message = new String (rPacket.getData(), 0, rPacket.getLength());
+			message = message.substring(message.indexOf("\n") + 1);
 	    	interpretMessage(message);
 	  	}	  		
   }
