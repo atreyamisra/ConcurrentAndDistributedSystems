@@ -107,7 +107,7 @@ public class MultithreadedServer extends Thread{
     		int count = items.get(product);
       	  	count+=amount;
       	  	items.put(product, count);
-    		return "";
+    		return 0;
     	}
     }
 }

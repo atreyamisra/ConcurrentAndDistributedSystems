@@ -37,21 +37,21 @@ public class MultithreadedServer extends Thread{
     	m = m.trim();
     	String[] n = m.split(" ");
     	if(n[0].equals("purchase")){
-    		String state = editInventory(n[2],Integer.valueOf(n[3]), true, false);
-			if(state.equals("A")){
+    		int state = editInventory(n[2],Integer.valueOf(n[3]), true);
+			if(state == 0){
 				Order o = new Order(n[1],n[2],Integer.valueOf(n[3]));
 				ol.add(o);
 				return "Your order has been placed, " + o.getId() + " " + n[1] + " " + n[2] + " " + n[3];
 			}	
-    		else if(state.equals("E"))
+    		else if(state == 1)
     			return "Not Available - Not enough items";
-    		else if(state.equals("N"))
+    		else if(state == 2)
     			return "Not Available - We do not sell this product";
     	}
     	else if(n[0].equals("cancel")){
     		Order o = ol.cancel(Integer.valueOf(n[1]));
     		if(o!=null){
-    			editInventory(o.getProduct(), o.getQuantity(), false, false);
+    			editInventory(o.getProduct(), o.getQuantity(), false);
     			return "Order " + n[1] + " is canceled";
     		}
     		else
@@ -68,31 +68,6 @@ public class MultithreadedServer extends Thread{
     			
     	}
     	else if(n[0].equals("list")){
-//    		String s = "";
-//    		int lines = 0;
-//    		Set<String> keys = items.keySet();
-//    		for(String a: keys){
-//    			s+= a + " " + items.get(a) + "\n";
-//    			lines++;
-//    		}
-//    		s=String.valueOf(lines) +"\n" + s.trim();
-//    		return s;
-    		return editInventory("?", 0,false, true);
-    	}
-    	return m;
-    }
-    private synchronized static String editInventory(String product, int amount, boolean decrease, boolean search){
-    	if(decrease){
-        	if(items.get(product)==null)
-        		return "N";
-        	else if(amount>items.get(product))
-      	  		return "E";
-      	  	int count = items.get(product);
-      	  	count-=amount;
-      	  	items.put(product, count);
-      	  	return "A";
-    	}
-    	else if (search){
     		String s = "";
     		int lines = 0;
     		Set<String> keys = items.keySet();
@@ -103,11 +78,24 @@ public class MultithreadedServer extends Thread{
     		s=String.valueOf(lines) +"\n" + s.trim();
     		return s;
     	}
+    	return m;
+    }
+    private synchronized static int editInventory(String product, int amount, boolean decrease){
+    	if(decrease){
+        	if(items.get(product)==null)
+        		return 2;
+        	else if(amount>items.get(product))
+      	  		return 1;
+      	  	int count = items.get(product);
+      	  	count-=amount;
+      	  	items.put(product, count);
+      	  	return 0;
+    	}
     	else{
     		int count = items.get(product);
       	  	count+=amount;
       	  	items.put(product, count);
-    		return "";
+    		return 0;
     	}
     }
 }
