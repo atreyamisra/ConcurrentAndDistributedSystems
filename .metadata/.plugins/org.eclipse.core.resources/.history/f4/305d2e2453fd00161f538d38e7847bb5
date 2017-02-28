@@ -10,11 +10,6 @@ public class Client {
     private static InputStreamReader inputStream;
     private static BufferedReader bufferedReader;
     private static String message = null;
-    private static DatagramPacket sPacket, rPacket;
-    private static InetAddress ia;
-    private static DatagramSocket datasocket;
-    private final static int len = 65507;
-    //private static BufferedReader stdinp;
 	
   public static void main (String[] args) {
     String hostAddress;
@@ -32,16 +27,6 @@ public class Client {
     hostAddress = args[0];
     tcpPort = Integer.parseInt(args[1]);
     udpPort = Integer.parseInt(args[2]);
-    
-    try {
-    	ia = InetAddress.getByName(hostAddress);
-    	datasocket = new DatagramSocket(); 
-    } catch ( UnknownHostException e){
-    			System.err.println (e);
-    } catch ( SocketException se ){
-    	System.err.println (se);
-    }
-
     
     try {
 		s=new Socket(hostAddress, tcpPort);
@@ -64,9 +49,7 @@ public class Client {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
-    
-
-    
+  	
     printStream = new PrintStream(output);
   	inputStream = new InputStreamReader(input);
   	bufferedReader = new BufferedReader(inputStream);
@@ -76,61 +59,45 @@ public class Client {
     while(sc.hasNextLine()) {
       String cmd = sc.nextLine();
       String[] tokens = cmd.split(" ");
-      boolean isIntP = true;
-      boolean isIntO = true;
-  	  try {
-		    int quant = Integer.parseInt(tokens[3]);
-		  } catch (Exception e) {
-		    isIntP = false;
-		  }
-  	  try {
-		    int quant = Integer.parseInt(tokens[1]);
-		  } catch (Exception e) {
-		    isIntO = false;
-		  }
+
       if (tokens[0].equals("setmode")) {
         if(tokens[1].equals("T")){
         	tcpOn = true;
-        	System.out.println("TCP");
-
-        	//printStream.println(output);
+        	printStream.println(output);
         }	
-        else if(tokens[1].equals("U")){
+        else{
         	tcpOn = false;
-        	System.out.println("UDP");
         }
-        else
-        	System.out.println("ERROR: No such command");
         	
     	  // TODO: set the mode of communication for sending commands to the server 
         // and display the name of the protocol that will be used in future
       }
-      else if (tokens[0].equals("purchase") && tokens.length==4 && isIntP) {
+      else if (tokens[0].equals("purchase")) {
     	if(tcpOn)
     		tcpMethod(cmd, tokens[0]);
     	else
-    		udpMethod(cmd, tokens[0], udpPort);
+    		;
         // TODO: send appropriate command to the server and display the
         // appropriate responses form the server
-      } else if (tokens[0].equals("cancel") && tokens.length==2 && isIntO) {
+      } else if (tokens[0].equals("cancel")) {
       	if(tcpOn)
       		tcpMethod(cmd, tokens[0]);
     	else
-    		udpMethod(cmd, tokens[0], udpPort);
+    		;
         // TODO: send appropriate command to the server and display the
         // appropriate responses form the server
-      } else if (tokens[0].equals("search") && tokens.length==2) {
+      } else if (tokens[0].equals("search")) {
       	if(tcpOn)
       		tcpMethod(cmd, tokens[0]);
     	else
-    		udpMethod(cmd, tokens[0], udpPort);
+    		;
         // TODO: send appropriate command to the server and display the
         // appropriate responses form the server
-      } else if (tokens[0].equals("list") && tokens.length==1) {
+      } else if (tokens[0].equals("list")) {
       	if(tcpOn)
     		tcpMethod(cmd, tokens[0]);
     	else
-    		udpMethod(cmd, tokens[0], udpPort);
+    		;
         // TODO: send appropriate command to the server and display the
         // appropriate responses form the server
       } else {
@@ -141,7 +108,6 @@ public class Client {
   private static void tcpMethod(String output, String action){
 	  	printStream.println(output);
 	  	if(action.equals("purchase")){
-	  		
 	    	try {
 				message = bufferedReader.readLine();
 			} catch (IOException e) {
@@ -163,22 +129,17 @@ public class Client {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-	    	if(message.substring(0, 1).equals("N")){
-	    		interpretMessage(message);
-	    	}
-	    	else{
-		    	int n = Integer.valueOf(message);
-		    	for(int i = 0; i<n; i++){
-			    	try {
-						message = bufferedReader.readLine();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-			    	interpretMessage(message);
-		    	}
-	    	}
+	    	int n = Integer.valueOf(message);
+	    	for(int i = 0; i<n; i++){
+		    	try {
+					message = bufferedReader.readLine();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		    	interpretMessage(message);
+	    	}	
 	  	}
-	  	else if(action.equals("list")){
+	  	else if(action.equals("search")){
 	    	try {
 				message = bufferedReader.readLine();
 			} catch (IOException e) {
@@ -196,64 +157,6 @@ public class Client {
 	  	}
 	  		
 
-  }
-  private static void udpMethod(String output, String action, int port){
-		byte [] buffer = new byte[output.length()]; 
-		buffer = output.getBytes();
-		sPacket = new DatagramPacket (buffer, buffer.length , ia, port); 
-		try {
-			datasocket.send(sPacket);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-	  	if(action.equals("purchase")){
-			byte[] rbuffer = new byte[len];
-			rPacket = new DatagramPacket(rbuffer, rbuffer.length);
-			try {
-				datasocket.receive (rPacket);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			String message = new String (rPacket.getData(), 0, rPacket.getLength());
-	    	interpretMessage(message);
-	  	}
-	  	else if(action.equals("cancel")){
-			byte[] rbuffer = new byte[len];
-			rPacket = new DatagramPacket(rbuffer, rbuffer.length);
-			try {
-				datasocket.receive (rPacket);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			String message = new String (rPacket.getData(), 0, rPacket.getLength());
-	    	interpretMessage(message);
-	  	}
-	  	else if(action.equals("search")){
-			byte[] rbuffer = new byte[len];
-			rPacket = new DatagramPacket(rbuffer, rbuffer.length);
-			try {
-				datasocket.receive (rPacket);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			String message = new String (rPacket.getData(), 0, rPacket.getLength());
-			message = message.substring(message.indexOf("\n") + 1);
-	    	interpretMessage(message);
-	  	}
-	  	else if(action.equals("list")){
-			byte[] rbuffer = new byte[len];
-			rPacket = new DatagramPacket(rbuffer, rbuffer.length);
-			try {
-				datasocket.receive (rPacket);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			String message = new String (rPacket.getData(), 0, rPacket.getLength());
-			message = message.substring(message.indexOf("\n") + 1);
-	    	interpretMessage(message);
-	  	}	  		
   }
   private static void interpretMessage(String m){
 	  System.out.println(m);

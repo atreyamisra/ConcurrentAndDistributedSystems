@@ -8,8 +8,8 @@ import java.util.*;
 
 public class MultithreadedServer extends Thread{
 	Socket theClient;
-	private static Hashtable<String, Integer> items = Server.items;
-	private static OrderLog ol = new OrderLog();
+	public static Hashtable<String, Integer> items = Server.items;
+	public static OrderLog ol = new OrderLog();
     public MultithreadedServer(Socket s){
     	theClient = s;	
     }
