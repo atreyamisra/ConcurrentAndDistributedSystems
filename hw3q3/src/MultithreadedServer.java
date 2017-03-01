@@ -61,7 +61,7 @@ public class MultithreadedServer extends Thread{
     	else if(n[0].equals("search")){
     		ArrayList<Order> a = ol.search(n[1]);
     		if(a.isEmpty())
-    			return "No orders found for " + n[1];
+    			return "No order found for " + n[1];
     		else{
     			return String.valueOf(a.size())+ "\n" + ol.ordersToString(a);
     		}

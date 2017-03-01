@@ -1,0 +1,15 @@
+setmode U
+UDP
+search xbox
+No orders found for xbox
+search xbox
+6, laptop, 15
+7, phone, 15
+8, phone, 5
+search xbox
+7, phone, 15
+8, phone, 5
+search xbox
+8, phone, 5
+search xbox
+8, phone, 5

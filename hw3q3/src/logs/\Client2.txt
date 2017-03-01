@@ -1,0 +1,42 @@
+purchase User2 ps4 17
+search User1
+Your order has been placed, 1 User2 ps4 17
+No orders found for User1
+list
+phone 20
+ps4 0
+camera 10
+laptop 15
+xbox 0
+list
+phone 20
+ps4 0
+camera 0
+laptop 15
+xbox 0
+setmode U
+UDP
+purchase User2 ps4 16
+Your order has been placed, 5 User2 ps4 16
+search User1
+2, xbox, 8
+3, camera, 10
+4, ps4, 1
+search User2
+5, ps4, 16
+setmode T
+TCP
+purchase xbox laptop 15
+Your order has been placed, 6 xbox laptop 15
+purchase xbox phone 15
+Your order has been placed, 7 xbox phone 15
+search xbox
+6, laptop, 15
+7, phone, 15
+8, phone, 5
+cancel 6
+Order 6 is canceled
+cancel 7
+7 not found, no such order
+purchase ps4 ps4 1340
+Not Available - Not enough items

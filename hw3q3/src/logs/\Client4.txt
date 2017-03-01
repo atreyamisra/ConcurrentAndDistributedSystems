@@ -1,0 +1,26 @@
+setmode U
+UDP
+list
+phone 0
+ps4 0
+camera 0
+laptop 0
+xbox 0
+list
+phone 0
+ps4 0
+camera 0
+laptop 15
+xbox 0
+list
+phone 15
+ps4 0
+camera 0
+laptop 15
+xbox 0
+list
+phone 15
+ps4 0
+camera 0
+laptop 15
+xbox 0

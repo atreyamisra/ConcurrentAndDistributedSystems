@@ -1,0 +1,56 @@
+purchase User1 ps4 17
+purchase User1 xbox 8
+Not Available - Not enough items
+Your order has been placed, 2 User1 xbox 8
+purchase User1 camera 10
+Your order has been placed, 3 User1 camera 10
+list
+phone 20
+ps4 0
+camera 0
+laptop 15
+xbox 0
+cancel 1
+Order 1 is canceled
+purchase User1 ps4 1
+Your order has been placed, 4 User1 ps4 1
+list
+phone 20
+ps4 0
+camera 0
+laptop 15
+xbox 0
+setmode U
+UDP
+list
+phone 20
+ps4 0
+camera 0
+laptop 15
+xbox 0
+purchase xbox laptop 15
+Not Available - Not enough items
+purchase xbox phone 5
+Your order has been placed, 8 xbox phone 5
+list
+phone 0
+ps4 0
+camera 0
+laptop 0
+xbox 0
+cancel 6
+6 not found, no such order
+cancel 7
+Order 7 is canceled
+purchase ps4 laptopwe 213123
+Not Available - We do not sell this product
+cancel 8
+Order 8 is canceled
+search xbox
+No orders found for xbox
+list
+phone 20
+ps4 0
+camera 0
+laptop 15
+xbox 0
