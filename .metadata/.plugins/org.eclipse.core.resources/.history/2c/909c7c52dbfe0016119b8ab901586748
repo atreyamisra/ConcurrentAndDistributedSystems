@@ -43,7 +43,7 @@ public class Garden {
 		lock.lock();
 		try{
 			holesDug++;
-			//System.out.println("Dug: " + holesDug);
+			System.out.println("Dug: " + holesDug);
 			maryHasShovel.signal();
 			diggingStarted.signal();
 		}
@@ -71,7 +71,7 @@ public class Garden {
 		lock.lock();
 		try{
 			seedsFilled++;
-			//System.out.println("Seeded: " + seedsFilled);
+			System.out.println("Seeded: " + seedsFilled);
 		}
 		finally{
 			lock.unlock();
@@ -98,7 +98,7 @@ public class Garden {
 		lock.lock();
 		try{
 			holesFilled++;
-			//System.out.println("Filled: " + holesFilled);
+			System.out.println("Filled: " + holesFilled);
 			newtonHasShovel.signal();
 		}
 		finally{
