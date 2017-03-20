@@ -74,8 +74,9 @@ public class Lamport extends Thread{
 					lamport.add(i, message);
 			}
 		}
+		order.get(tick).set(sid, true);	
 	}
-/*    private synchronized static void lamport(){
+    private synchronized static void lamport(){
     	Socket[] server = new Socket[Server.numServers];
     	for(int i = 0; i<Server.numServers; i++){
     		if(i!=Server.myPort){
@@ -96,7 +97,7 @@ public class Lamport extends Thread{
     		}
     	}
     }
-*/    private synchronized static void requestCS(){
+    private synchronized static void requestCS(){
     	String request = String.valueOf(LogicalClock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
     	printStream.println(request);
     	lamport.add(request);
