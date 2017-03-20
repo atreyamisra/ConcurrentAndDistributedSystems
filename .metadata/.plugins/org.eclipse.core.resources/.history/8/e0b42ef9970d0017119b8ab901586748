@@ -7,6 +7,7 @@ import java.util.*;
 
 public class Lamport extends Thread{
 	Socket theServer;
+	private static LinkedList<String> lamport;
 	private static InputStream input;
     private static OutputStream output;
     private static PrintStream printStream;
@@ -47,7 +48,7 @@ public class Lamport extends Thread{
 	}
 	private synchronized String processMessage(String message){
 		if(message.equals("release")){
-			String tokens = Server.lamport.pollFirst();
+			String tokens = lamport.pollFirst();
 			String process = tokens.substring(tokens.indexOf(' '+1, tokens.indexOf(' ')+1));
 			MultithreadedServer.processMessage(process);
 			return "";
@@ -62,15 +63,15 @@ public class Lamport extends Thread{
 		String[] requestTick = requestID.split(" ");
 		int tick = Integer.valueOf(requestTick[0]);
 		int sid = Integer.valueOf(requestTick[1]);
-		for(int i = 0; i<Server.lamport.size(); i++){
-			String compareID = Server.lamport.get(i);
+		for(int i = 0; i<lamport.size(); i++){
+			String compareID = lamport.get(i);
 			int compareTick = Integer.valueOf(compareID.substring(0, compareID.indexOf(' ')));
 			if(compareTick>tick)
-				Server.lamport.add(i, message);
+				lamport.add(i, message);
 			else if(compareTick==tick){
 				int compareServer = Integer.valueOf(compareID.substring(compareID.indexOf(' ') + 1, compareID.indexOf(' '+1, compareID.indexOf(' '))));
 				if (compareServer>sid)
-					Server.lamport.add(i, message);
+					lamport.add(i, message);
 			}
 		}
 	}
