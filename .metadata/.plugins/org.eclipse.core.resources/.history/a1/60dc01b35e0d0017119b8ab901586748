@@ -26,6 +26,7 @@ public class Lamport extends Thread{
 			  bufferedReader = new BufferedReader(inputStream);
 			  message = null;
 			  message=bufferedReader.readLine();
+			  order = new ArrayList<ArrayList<Boolean>>();
 	  		  while(message!=null){
 	  	  			if(message.equals("hello")){
 	  	  				  printStream.println(message);
@@ -64,23 +65,17 @@ public class Lamport extends Thread{
 		String[] requestTick = requestID.split(" ");
 		int tick = Integer.valueOf(requestTick[0]);
 		int sid = Integer.valueOf(requestTick[1]);
-		for(int i = 0; i<lamport.size(); i++){
-			String compareID = lamport.get(i);
-			int compareTick = Integer.valueOf(compareID.substring(0, compareID.indexOf(' ')));
-			if(compareTick>tick)
-				lamport.add(i, message);
-			else if(compareTick==tick){
-				int compareServer = Integer.valueOf(compareID.substring(compareID.indexOf(' ') + 1, compareID.indexOf(' '+1, compareID.indexOf(' '))));
-				if (compareServer>sid)
-					lamport.add(i, message);
+		if(tick>order.size()){
+			while(tick<order.size()){
+				int size = order.size();
+				order.add(new ArrayList<Boolean>());
+				for(int i=0; i<Server.numServers; i++){
+					order.get(size).add(false);
+				}
 			}
 		}
-					
-		}
-		
-		
-		}
 		order.get(tick).set(sid, true);
+		for(in)
 		
 		
 	}
