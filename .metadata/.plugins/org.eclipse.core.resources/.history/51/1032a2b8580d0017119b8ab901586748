@@ -51,7 +51,6 @@ public class MultithreadedServer extends Thread{
     }
     private synchronized void askForCS(){
 			  Server.wantCS = true;
-			  Server.message=message;
 			  while(!Server.acknowledgements & !Server.top);
 			  String response=processMessage(message);
 			  printStream.println(response);
@@ -63,7 +62,7 @@ public class MultithreadedServer extends Thread{
 				e.printStackTrace();
 			}
     }
-    public synchronized static String processMessage(String m){
+    private static String processMessage(String m){
     	m = m.trim();
     	String[] n = m.split(" ");
     	if(n[0].equals("purchase")){

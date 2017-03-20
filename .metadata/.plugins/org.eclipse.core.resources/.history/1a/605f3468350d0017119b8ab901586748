@@ -3,10 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -22,10 +18,6 @@ public class Server {
 	public static ArrayList<Integer> ports; //the list of servers' ports
 	public static LogicalClock clock;
     public static Hashtable<String, Integer> items = new Hashtable<String, Integer>(); //the inventory
-    public static boolean acknowledgements;
-    public static boolean top;
-    public static boolean wantCS;
-    public static String message;
 	
 	public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);
@@ -108,24 +100,8 @@ public class Server {
 			ServerSocket listener = new ServerSocket(port);
 			Socket s;
 			while ( (s = listener.accept()) != null) {
-		  		InputStream input = s.getInputStream();
-				OutputStream output = s.getOutputStream();
-				PrintStream printStream = new PrintStream(output);
-				InputStreamReader inputStream = new InputStreamReader(input);
-				BufferedReader bufferedReader = new BufferedReader(inputStream);
-				String message = bufferedReader.readLine();
-	  			if(message.equals("hi")){
-	  				printStream.println(message);
-	  				Thread t = new MultithreadedServer(s);
-	  				t.start();
-	  			  }
-	  			else if(message.equals("hello")){
-	  				printStream.println(message);
-					Thread l = new Lamport(s);
-					l.start();
-	  			}
-				
-				
+				Thread t = new MultithreadedServer(s);
+				t.start();
 			}
 		} catch (IOException e) {
 			System.err.println("Server aborted:" + e);

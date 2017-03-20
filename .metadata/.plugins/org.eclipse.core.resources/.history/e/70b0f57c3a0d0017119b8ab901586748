@@ -1,69 +1,49 @@
 //am73676_sr39533
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.util.*;
 
 public class MultithreadedServer extends Thread{
-	private static InputStream input;
-    private static OutputStream output;
-    private static PrintStream printStream;
-    private static InputStreamReader inputStream;
-    private static BufferedReader bufferedReader;
-    private static String message = null;
 	Socket theClient;
 	private static Hashtable<String, Integer> items = Server.items;
 	private static OrderLog ol = new OrderLog();
 	private static boolean client;
-    private static boolean first = true;
+	private static boolean server;
     public MultithreadedServer(Socket s){
     	theClient = s;	
     }
     public void run(){
   	  try{
-  		  input = theClient.getInputStream();
-		  output = theClient.getOutputStream();
-		  printStream = new PrintStream(output);
-		  inputStream = new InputStreamReader(input);
-		  bufferedReader = new BufferedReader(inputStream);
+  		  InputStream input = theClient.getInputStream();
+		  OutputStream output = theClient.getOutputStream();
+		  PrintStream printStream = new PrintStream(output);
+		  InputStreamReader inputStream = new InputStreamReader(input);
+		  BufferedReader bufferedReader = new BufferedReader(inputStream);
 		  String message = null;
 		  message=bufferedReader.readLine();
   		  while(message!=null){
-  	  			  if(message.equals("hi")){
-  	  				  printStream.println(message);
-  	  				  client = true;
-  	  			  }
-  	  			  else{
-  	  				  askForCS();
-  	  			  }
+  			  if(message.equals("hi")){
+  				  printStream.println(message);
+  				  client = true;
+  			  }
+  			  if(message.equals("hello")){
+  				  printStream.println(message);
+				  client = false;
+  			  }
+  			  String response=processMessage(message);
+  			  printStream.println(response);
+    		  message = bufferedReader.readLine();
   		  }
   	  }
   	  catch(Exception e){
   		  System.err.println(e);
   	  }
     }
-    private synchronized void askForCS(){
-			  Server.wantCS = true;
-			  Server.message=message;
-			  while(!Server.acknowledgements & !Server.top);
-			  String response=processMessage(message);
-			  printStream.println(response);
-			  Server.wantCS = false;
-			  try {
-				message = bufferedReader.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    }
-    public synchronized static String processMessage(String m){
+    private static String processMessage(String m){
     	m = m.trim();
     	String[] n = m.split(" ");
     	if(n[0].equals("purchase")){

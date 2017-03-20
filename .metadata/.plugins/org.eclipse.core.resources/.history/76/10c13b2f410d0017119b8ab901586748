@@ -28,42 +28,34 @@ public class MultithreadedServer extends Thread{
     }
     public void run(){
   	  try{
-  		  input = theClient.getInputStream();
-		  output = theClient.getOutputStream();
-		  printStream = new PrintStream(output);
-		  inputStream = new InputStreamReader(input);
-		  bufferedReader = new BufferedReader(inputStream);
+  		  InputStream input = theClient.getInputStream();
+		  OutputStream output = theClient.getOutputStream();
+		  PrintStream printStream = new PrintStream(output);
+		  InputStreamReader inputStream = new InputStreamReader(input);
+		  BufferedReader bufferedReader = new BufferedReader(inputStream);
 		  String message = null;
 		  message=bufferedReader.readLine();
   		  while(message!=null){
-  	  			  if(message.equals("hi")){
-  	  				  printStream.println(message);
-  	  				  client = true;
-  	  			  }
-  	  			  else{
-  	  				  askForCS();
-  	  			  }
+  			  if(message.equals("hi")){
+  				  printStream.println(message);
+  				  client = true;
+  			  }
+  			  if(message.equals("hello")){
+  				  printStream.println(message);
+				  client = false;
+  			  }
+  			  while(!Server.acknowledgements & !Server.top){
+  				  String response=processMessage(message);
+    			  printStream.println(response);
+    			  message = bufferedReader.readLine();
+  			  }
   		  }
   	  }
   	  catch(Exception e){
   		  System.err.println(e);
   	  }
     }
-    private synchronized void askForCS(){
-			  Server.wantCS = true;
-			  Server.message=message;
-			  while(!Server.acknowledgements & !Server.top);
-			  String response=processMessage(message);
-			  printStream.println(response);
-			  Server.wantCS = false;
-			  try {
-				message = bufferedReader.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    }
-    public synchronized static String processMessage(String m){
+    private static String processMessage(String m){
     	m = m.trim();
     	String[] n = m.split(" ");
     	if(n[0].equals("purchase")){
@@ -131,4 +123,78 @@ public class MultithreadedServer extends Thread{
     		return "";
     	}
     }
+    private synchronized static void lamport(){
+    	Socket[] server = new Socket[Server.numServers];
+    	for(int i = 0; i<Server.numServers; i++){
+    		if(i!=Server.myPort){
+        		try {
+    				server[i]=new Socket(Server.addresses.get(i), Server.ports.get(i));
+        		} catch (UnknownHostException e) {
+    				e.printStackTrace();
+        		} catch (IOException e) {
+    				//alive = false;
+    		  }
+    		}
+    	}
+    	for(int i = 0; i<Server.numServers; i++){
+    		if(!checkServer(server[i])){
+    			Server.addresses.remove(i);
+    			Server.ports.remove(i);
+    			Server.numServers--;
+    		}
+    	}
+    }
+    
+    private static boolean checkServer(Socket server){
+  	  boolean alive = true;
+ /* 	  if(start){
+  		  try {
+  				server=new Socket(Server.addresses.get(index), Server.ports.get(index));
+  		  } catch (UnknownHostException e) {
+  				e.printStackTrace();
+  		  } catch (IOException e) {
+  				alive = false;
+  		  }
+  	  }
+ */ 	  try {
+  			server.setSoTimeout(100);
+  		} catch (SocketException e2) {
+  			// TODO Auto-generated catch block
+  			e2.printStackTrace();
+  		}
+  	  try {
+  			input = server.getInputStream();
+  	  } catch (IOException e1) {
+  			e1.printStackTrace();
+  		}
+  	  	
+  	    try {
+  			output = server.getOutputStream();
+  		} catch (IOException e1) {
+  			e1.printStackTrace();
+  		}
+  	    printStream = new PrintStream(output);
+  	  	inputStream = new InputStreamReader(input);
+  	  	bufferedReader = new BufferedReader(inputStream);
+  	  	message = null;
+  	    String check = "hello";
+  	  	printStream.println(check);
+      	try {
+  			message = bufferedReader.readLine();
+  		} catch(SocketTimeoutException ste){
+  			alive = false;
+  		} catch (IOException e) {
+  			e.printStackTrace();
+  		}
+      	if(!message.equals("hello"))
+      		alive = false;
+  	    if(alive)
+  			try {
+  				server.setSoTimeout(0);
+  			} catch (SocketException e) {
+  				e.printStackTrace();
+  			}
+  	  return alive;
+    }
+
 }
