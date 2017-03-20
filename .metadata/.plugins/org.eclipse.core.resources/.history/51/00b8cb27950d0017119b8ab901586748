@@ -39,15 +39,16 @@ public class MultithreadedServer extends Thread{
   	  			  if(message.equals("hi")){
   	  				  printStream.println(message);
   	  				  client = true;
-	  				  try {
-  	  					  message = bufferedReader.readLine();
-  	  				  } catch (IOException e) {
-  					// TODO Auto-generated catch block
-  	  					  e.printStackTrace();
-  	  				  }  
+  	  				  
   	  			  }
   	  			  else{
   	  				  askForCS();
+  	  			try {
+  					message = bufferedReader.readLine();
+  				} catch (IOException e) {
+  					// TODO Auto-generated catch block
+  					e.printStackTrace();
+  				}
   	  			  }
   		  }
   	  }
@@ -56,9 +57,8 @@ public class MultithreadedServer extends Thread{
   	  }
     }
     private synchronized void askForCS(){
-    		Server.message=message;  
-    		Server.wantCS = true;
-			  
+			  Server.wantCS = true;
+			  Server.message=message;
 			  while(!Server.acknowledgements & !Server.top);
 			  String response=processMessage(message);
 			  printStream.println(response);

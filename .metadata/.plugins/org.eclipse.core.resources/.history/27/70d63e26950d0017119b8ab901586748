@@ -45,6 +45,7 @@ public class Lamport extends Thread{
 		} catch(Exception e){
 			System.err.println(e);
 		}
+		
 	}
 	private synchronized String processMessage(String message){
 		if(message.equals("release")){
@@ -73,7 +74,8 @@ public class Lamport extends Thread{
 				if (compareServer>sid)
 					lamport.add(i, message);
 			}
-		}			
+		}
+					
 		}
 		
 		
