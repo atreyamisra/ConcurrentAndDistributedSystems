@@ -147,20 +147,20 @@ public class Client {
 	  boolean alive = true;
 	  try {
 			s=new Socket(ip[index], port[index]);
-	  } catch (UnknownHostException e) {
+		} catch (UnknownHostException e) {
 			e.printStackTrace();
-	  } catch (IOException e) {
+		} catch (IOException e) {
 			alive = false;
-	  }
-	  try {
+		}
+	    try {
 			s.setSoTimeout(100);
 		} catch (SocketException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-	  try {
+	    try {
 			input = s.getInputStream();
-	  } catch (IOException e1) {
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	  	
@@ -184,12 +184,8 @@ public class Client {
 		}
     	if(!message.equals("hi"))
     		alive = false;
-	    if(alive)
-			try {
-				s.setSoTimeout(0);
-			} catch (SocketException e) {
-				e.printStackTrace();
-			}
+    	
+	    
 	  return alive;
   }
 
