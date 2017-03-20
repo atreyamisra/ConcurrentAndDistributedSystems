@@ -73,9 +73,14 @@ public class Lamport extends Thread{
 				if (compareServer>sid)
 					lamport.add(i, message);
 			}
+		}			
+		}
+		
+		
 		}
 		order.get(tick).set(sid, true);
-			
+		
+		
 	}
     private synchronized static void lamport(){
     	Socket[] server = new Socket[Server.numServers];
