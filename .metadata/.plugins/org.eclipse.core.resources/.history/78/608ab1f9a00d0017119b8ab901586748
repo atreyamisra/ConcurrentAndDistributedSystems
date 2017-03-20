@@ -62,24 +62,15 @@ public class Lamport extends Thread{
 		String[] requestTick = requestID.split(" ");
 		int tick = Integer.valueOf(requestTick[0]);
 		int sid = Integer.valueOf(requestTick[1]);
-		for(int i = 0; i<=Server.lamport.size(); i++){
-			if(i==Server.lamport.size()){
-				Server.lamport.add(message);
-				break;
-			}	
+		for(int i = 0; i<Server.lamport.size(); i++){
 			String compareID = Server.lamport.get(i);
 			int compareTick = Integer.valueOf(compareID.substring(0, compareID.indexOf(' ')));
-			if(compareTick>tick){
+			if(compareTick>tick)
 				Server.lamport.add(i, message);
-				break;
-			}	
 			else if(compareTick==tick){
-				int compareServer = Integer.valueOf(compareID.substring(compareID.indexOf(' ') + 1, compareID.indexOf(' ', compareID.indexOf(' ')+1)+1));
-				if (compareServer>sid){
+				int compareServer = Integer.valueOf(compareID.substring(compareID.indexOf(' ') + 1, compareID.indexOf(' '+1, compareID.indexOf(' '))));
+				if (compareServer>sid)
 					Server.lamport.add(i, message);
-					break;
-				}
-					
 			}
 		}
 	}

@@ -74,7 +74,7 @@ public class Lamport extends Thread{
 				break;
 			}	
 			else if(compareTick==tick){
-				int compareServer = Integer.valueOf(compareID.substring(compareID.indexOf(' ') + 1, compareID.indexOf(' ', compareID.indexOf(' ')+1)+1));
+				int compareServer = Integer.valueOf(compareID.substring(compareID.indexOf(' ') + 1, compareID.indexOf(' ', compareID.indexOf(' ')+1)));
 				if (compareServer>sid){
 					Server.lamport.add(i, message);
 					break;
