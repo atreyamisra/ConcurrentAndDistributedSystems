@@ -1,5 +1,10 @@
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class Server {
 	
@@ -10,13 +15,13 @@ public class Server {
 	public static ArrayList<String> addresses; //the list of servers' addresses
 	public static ArrayList<Integer> ports; //the list of servers' ports
 	public static LogicalClock clock;
-	
+    public static Hashtable<String, Integer> items = new Hashtable<String, Integer>(); //the inventory
 	
 	public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);
 		
-		String filename;
-		boolean inputOK = true;
+		String inventory = null; //the inventory filename
+		boolean inputOK = true; //boolean to check if the input is valid
 		
 		//Grab the first line of inputs
 		do{ //if inputs are incorrect, try again
@@ -26,7 +31,7 @@ public class Server {
 			try{
 				ID = Integer.parseInt(inputs[0]);
 				numServers = Integer.parseInt(inputs[1]);
-				filename = inputs[2];
+				inventory = inputs[2];
 			}
 			catch(Exception e){
 				inputOK = false;
@@ -60,6 +65,35 @@ public class Server {
 		
 		//TODO: spin off Server communication threads, link to other servers, listen for clients, spin off client handlers
 		clock = new LogicalClock();
+		
+		//parse the input file and fill the inventory
+		String line = null;
+		String[] item = new String[2];
+		try {
+	        FileReader fileReader = 
+	            new FileReader(inventory);
+
+	        BufferedReader bufferedReader = 
+	            new BufferedReader(fileReader);
+
+	        while((line = bufferedReader.readLine()) != null) {
+	        	line = line.trim();
+	        	item = line.split(" ");
+	        	if(item.length == 2)
+	        		items.put(item[0], Integer.valueOf(item[1]));
+	        }   
+	        bufferedReader.close();         
+	    }
+	    catch(FileNotFoundException ex) {
+	        System.out.println(
+	            "Unable to open file '" + inventory + "'");                
+	    }
+	    catch(IOException ex) {
+	        System.out.println(
+	            "Error reading file '" + inventory + "'");                  
+	    }
+		
+		
 		
 	}
 }
