@@ -21,8 +21,6 @@ public class Server {
 	public static int myPort;
 	public static ArrayList<String> addresses; //the list of servers' addresses
 	public static ArrayList<Integer> ports; //the list of servers' ports
-	public static ArrayList<Boolean> dead;
-	public static ArrayList<Boolean> request;
 	public static LogicalClock clock;
     public static Hashtable<String, Integer> items = new Hashtable<String, Integer>(); //the inventory
     public static boolean acknowledgements;
@@ -62,8 +60,6 @@ public class Server {
 				try{
 					ports.add(Integer.parseInt(parsed[1]));
 					addresses.add(parsed[0]);
-					dead.add(false);
-					request.add(false);
 				}
 				catch(Exception e){
 					inputOK = false;

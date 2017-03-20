@@ -62,6 +62,7 @@ public class MultithreadedServer extends Thread{
 			  while(!Server.acknowledgements & !Server.top);
 			  String response=processMessage(message);
 			  printStream.println(response);
+			  Server.wantCS = false;
 			  try {
 				message = bufferedReader.readLine();
 			} catch (IOException e) {

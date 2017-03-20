@@ -80,6 +80,7 @@ public class Lamport extends Thread{
 					Server.lamport.add(i, message);
 					break;
 				}
+					
 			}
 		}
 	}
@@ -104,6 +105,52 @@ public class Lamport extends Thread{
     		}
     	}
     }
-*/
-
+*/    private synchronized static void requestCS(){
+    	String request = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
+    	printStream.println(request);
+    	lamport.add(request);
+    	
+    }
+	private static boolean checkServer(Socket server){
+		  	  boolean alive = true;
+		  	  try {
+		  			server.setSoTimeout(100);
+		  		} catch (SocketException e2) {
+		  			// TODO Auto-generated catch block
+		  			e2.printStackTrace();
+		  		}
+		  	  try {
+		  			input = server.getInputStream();
+		  	  } catch (IOException e1) {
+		  			e1.printStackTrace();
+		  		}
+		  	  	
+		  	    try {
+		  			output = server.getOutputStream();
+		  		} catch (IOException e1) {
+		  			e1.printStackTrace();
+		  		}
+		  	    printStream = new PrintStream(output);
+		  	  	inputStream = new InputStreamReader(input);
+		  	  	bufferedReader = new BufferedReader(inputStream);
+		  	  	message = null;
+		  	    String check = "hello";
+		  	  	printStream.println(check);
+		      	try {
+		  			message = bufferedReader.readLine();
+		  		} catch(SocketTimeoutException ste){
+		  			alive = false;
+		  		} catch (IOException e) {
+		  			e.printStackTrace();
+		  		}
+		      	if(!message.equals("hello"))
+		      		alive = false;
+		  	    if(alive)
+		  			try {
+		  				server.setSoTimeout(0);
+		  			} catch (SocketException e) {
+		  				e.printStackTrace();
+		  			}
+		  	  return alive;
+		    }
 }

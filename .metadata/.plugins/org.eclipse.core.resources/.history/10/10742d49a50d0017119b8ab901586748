@@ -46,7 +46,7 @@ public class ConnectionListener extends Thread{
 			printStream = new PrintStream(output);
 			inputStream = new InputStreamReader(input);
 			bufferedReader = new BufferedReader(inputStream);
-			String message = null;
+			String message;
 			try{
 				message = bufferedReader.readLine();
 			}
