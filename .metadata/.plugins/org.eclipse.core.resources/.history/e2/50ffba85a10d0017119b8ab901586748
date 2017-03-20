@@ -11,7 +11,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.LinkedList;
 
 public class Server {
 	
@@ -27,7 +26,6 @@ public class Server {
     public static boolean top;
     public static boolean wantCS;
     public static String message;
-    public static LinkedList<String> lamport;
 	
 	public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);
