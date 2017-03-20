@@ -58,7 +58,7 @@ public class Lamport extends Thread{
 		}
 	}
 	private synchronized void addToList(String message){
-		String requestID = message.substring(0, message.indexOf(' '+1, message.indexOf(' ')+1));
+		String requestID = message.substring(0, message.indexOf(' ', message.indexOf(' ')+1)+1);
 		String[] requestTick = requestID.split(" ");
 		int tick = Integer.valueOf(requestTick[0]);
 		int sid = Integer.valueOf(requestTick[1]);
