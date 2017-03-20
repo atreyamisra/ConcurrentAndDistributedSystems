@@ -93,8 +93,6 @@ public class Server {
 	        System.out.println(
 	            "Error reading file '" + inventory + "'");                  
 	    }
-		
-		//Listening
 		try {
 			int port = myPort;		
 			ServerSocket listener = new ServerSocket(port);

@@ -18,7 +18,6 @@ public class Client {
     private static int[] port;
     private static int ind = 0;
     private final static int len = 65507;
-    private static boolean first = true;
     
 	
   public static void main (String[] args) {
@@ -64,28 +63,20 @@ public class Client {
 		    isIntO = false;
 		  }
       if (tokens[0].equals("purchase") && tokens.length==4 && isIntP) {
-    	while(!checkServer(ind)){
+    	while(!checkServer(ind))
     		ind++;
-    		first = true;
-    	}
     	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("cancel") && tokens.length==2 && isIntO) {
-      	while(!checkServer(ind)){
+      	while(!checkServer(ind))
     		ind++;
-    		first = true;
-    	}
       	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("search") && tokens.length==2) {
-      	while(!checkServer(ind)){
+      	while(!checkServer(ind))
     		ind++;
-    		first = true;
-    	}
       	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("list") && tokens.length==1) {
-      	while(!checkServer(ind)){
+      	while(!checkServer(ind))
     		ind++;
-    		first = true;
-    	}
     	tcpMethod(cmd, tokens[0]);
       } else {
         System.out.println("ERROR: No such command");
@@ -153,14 +144,12 @@ public class Client {
   
   private static boolean checkServer(int index){
 	  boolean alive = true;
-	  if(first){
-		  try {
-				s=new Socket(ip[index], port[index]);
-		  } catch (UnknownHostException e) {
-				e.printStackTrace();
-		  } catch (IOException e) {
-				alive = false;
-		  }
+	  try {
+			s=new Socket(ip[index], port[index]);
+	  } catch (UnknownHostException e) {
+			e.printStackTrace();
+	  } catch (IOException e) {
+			alive = false;
 	  }
 	  try {
 			s.setSoTimeout(100);

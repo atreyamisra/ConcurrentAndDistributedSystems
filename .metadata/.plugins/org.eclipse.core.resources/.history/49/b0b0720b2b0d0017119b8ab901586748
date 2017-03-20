@@ -11,8 +11,6 @@ public class MultithreadedServer extends Thread{
 	Socket theClient;
 	private static Hashtable<String, Integer> items = Server.items;
 	private static OrderLog ol = new OrderLog();
-	private static boolean client;
-	private static boolean server;
     public MultithreadedServer(Socket s){
     	theClient = s;	
     }
@@ -26,14 +24,6 @@ public class MultithreadedServer extends Thread{
 		  String message = null;
 		  message=bufferedReader.readLine();
   		  while(message!=null){
-  			  if(message.equals("hi")){
-  				  printStream.println(message);
-  				  client = true;
-  			  }
-  			  if(message.equals("hello")){
-  				  printStream.println(message);
-				  client = false;
-  			  }
   			  String response=processMessage(message);
   			  printStream.println(response);
     		  message = bufferedReader.readLine();
@@ -43,7 +33,7 @@ public class MultithreadedServer extends Thread{
   		  System.err.println(e);
   	  }
     }
-    private static String processMessage(String m){
+    public static String processMessage(String m){
     	m = m.trim();
     	String[] n = m.split(" ");
     	if(n[0].equals("purchase")){

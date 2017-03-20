@@ -3,8 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -21,6 +19,7 @@ public class Server {
 	
 	public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);
+		
 		String inventory = null; //the inventory filename
 		boolean inputOK = true; //boolean to check if the input is valid
 		
@@ -93,18 +92,5 @@ public class Server {
 	        System.out.println(
 	            "Error reading file '" + inventory + "'");                  
 	    }
-		
-		//Listening
-		try {
-			int port = myPort;		
-			ServerSocket listener = new ServerSocket(port);
-			Socket s;
-			while ( (s = listener.accept()) != null) {
-				Thread t = new MultithreadedServer(s);
-				t.start();
-			}
-		} catch (IOException e) {
-			System.err.println("Server aborted:" + e);
-		}
 	}
 }
