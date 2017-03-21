@@ -115,32 +115,11 @@ public class Server {
 	    }
 		
 		//Listening
-		try {
-			int port = myPort;		
-			ServerSocket listener = new ServerSocket(port);
-			Socket s;
-			while ( (s = listener.accept()) != null) {
-		  		InputStream input = s.getInputStream();
-				OutputStream output = s.getOutputStream();
-				PrintStream printStream = new PrintStream(output);
-				InputStreamReader inputStream = new InputStreamReader(input);
-				BufferedReader bufferedReader = new BufferedReader(inputStream);
-				String message = bufferedReader.readLine();
-	  			if(message.equals("hi")){
-	  				printStream.println(message);
-	  				Thread t = new MultithreadedServer(s);
-	  				t.start();
-	  			  }
-	  			else if(message.equals("hello")){
-	  				printStream.println(message);
-					Thread l = new Lamport(s);
-					l.start();
-	  			}
-				
-				
-			}
-		} catch (IOException e) {
-			System.err.println("Server aborted:" + e);
-		}
+		ConnectionListener listener = new ConnectionListener(myPort);
+		listener.start();
+		
+		//Start the thread which starts links with other servers
+		LamportClient client = new LamportClient(true);
+		client.start();
 	}
 }
