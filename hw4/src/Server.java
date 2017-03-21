@@ -20,21 +20,23 @@ public class Server {
 	public static int numServers; //the total number of servers
 	public static String myAddress; //this server's IP
 	public static int myPort;
-	public static int numAlive;
+	public static volatile int numAlive;
 	public static ArrayList<String> addresses; //the list of servers' addresses
 	public static ArrayList<Integer> ports; //the list of servers' ports
 	public static ArrayList<Boolean> dead;
-	public static ArrayList<Boolean> request;
-	public static Hashtable<String, Integer> nod;
+	public static volatile ArrayList<Boolean> request;
+	public static ArrayList<Boolean> release;
+	public static volatile Hashtable<String, Integer> nod;
     public static Semaphore s = new Semaphore(1, true);
+    public static Semaphore t = new Semaphore(1, true);
 	public static LogicalClock clock;
     public static Hashtable<String, Integer> items = new Hashtable<String, Integer>(); //the inventory
     public static boolean acknowledgements;
-    public static boolean top;
-    public static boolean wantCS;
+    public static volatile boolean top=false;
+    public static volatile boolean wantCS;
     public static String message;
     public static String requester;
-    public static LinkedList<String> lamport;
+    public static volatile LinkedList<String> lamport;
 	
 	public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);

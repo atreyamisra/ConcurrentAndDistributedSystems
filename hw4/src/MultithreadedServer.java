@@ -21,11 +21,14 @@ public class MultithreadedServer extends Thread{
 	Socket theClient;
 	private static Hashtable<String, Integer> items = Server.items;
 	private static OrderLog ol = new OrderLog();
-	private static boolean client;
     private static boolean first = true;
+    private static int myTimestamp = 0; //holds the time stamp for the current request
+    
+    
     public MultithreadedServer(Socket s){
     	theClient = s;	
     }
+    
     public void run(){
   	  try{
   		  input = theClient.getInputStream();
@@ -38,7 +41,6 @@ public class MultithreadedServer extends Thread{
   		  while(message!=null){
   	  			  if(message.equals("hi")){
   	  				  printStream.println(message);
-  	  				  client = true;
 	  				  try {
   	  					  message = bufferedReader.readLine();
   	  				  } catch (IOException e) {
@@ -57,17 +59,46 @@ public class MultithreadedServer extends Thread{
     }
     private void askForCS(){
     	try {
-			Server.s.acquire();
+			Server.s.acquire(); //locks the server.requester variable so that multiple clients cannot edit, only one client at a time here
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-    		Server.top=false;
-    		Server.message=message;
-    		Server.wantCS = true;
-			  while((Server.nod.get(Server.requester)<Server.numAlive)&&!Server.top);
-			  String response=processMessage(message);
-			  printStream.println(response);
+    		//Server.message=message;
+    		
+    		
+			Server.clock.tick();
+			String requester = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
+			Server.requester=requester;
+			Server.nod.put(requester, 0);
+			Lamport.addToList(requester);
+			if(first){
+				for(int i = 1;i<=Server.addresses.size();i++){
+					if(i!=Server.ID){
+						LamportClientThread t = new LamportClientThread(Server.addresses.get(i), Server.ports.get(i), i);
+						Server.request.add(true);
+						t.start();
+					}
+				}
+				first=false;
+			}
+			else{
+				for(int i = 0;i<Server.numServers;i++){
+					Server.request.set(i, true); //signals threads that they can start sending the request
+				}
+				for(int i = 0;i<Server.numServers;i++){
+					if(!Server.dead.get(i) && (i!=(Server.ID-1)))
+						while(Server.request.get(i)); //waits for all threads connected to each server sends request
+				}
+			}
+
+			Server.s.release(); //allow other clients to ask for the CS
+			
+			
+			while((Server.nod.get(requester)<Server.numAlive) && (!Server.top) && (!Server.lamport.peek().equals(requester))); //waits for all requests to bounce back, the server to notice top of linked list is its server, and that the command at top is assciated with specific client
+			  	Server.top=false;
+				String response=processMessage(message);
+			  printStream.println(response); // sends message back to client
 			  try {
 				message = bufferedReader.readLine();
 			} catch (IOException e) {

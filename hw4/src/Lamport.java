@@ -31,9 +31,9 @@ public class Lamport extends Thread{
 	  	  				  message=bufferedReader.readLine();
 	  	  			}
 	  	  			else{
-	  	  				String response=processMessage(message);
-	  	  				if(!response.equals(""))
-	  	  					printStream.println(response);
+	  	  				if(!message.equals("release"))
+	  	  					printStream.println(message);
+	  	  				processMessage(message);	  	  					
 	  	  				message = bufferedReader.readLine();
 	  	  			  }
 	  			  
@@ -45,8 +45,14 @@ public class Lamport extends Thread{
 	private synchronized String processMessage(String message){
 		if(message.equals("release")){
 			String tokens = Server.lamport.pollFirst();
-			String process = tokens.substring(tokens.indexOf(' '+1, tokens.indexOf(' ')+1));
+			String process = tokens.substring(tokens.indexOf(' ', tokens.indexOf(' ')+1)+1);
 			MultithreadedServer.processMessage(process);
+			tokens = Server.lamport.peek();
+			String token[] = tokens.split(" ");
+			int nextID = Integer.valueOf(token[1]);
+			if(nextID==Server.ID){
+				Server.top=true;
+			}
 			return "";
 		}
 		else{

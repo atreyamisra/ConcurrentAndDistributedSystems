@@ -20,7 +20,7 @@ public class LamportClientThread extends Thread{
     public LamportClientThread(String serverIP, int portNumber, int serverID){
     	ip = serverIP;
     	port=portNumber;
-    	int sid=serverID-1;
+    	sid=serverID-1;
     }
     public void run(){
     	while(true){
@@ -38,7 +38,7 @@ public class LamportClientThread extends Thread{
     	}
     }
     private synchronized static void releaseCS(){
-      	printStream.println(Server.ID + " release");
+      	printStream.println("release");
     	try {
   			message = bufferedReader.readLine();
   		} catch(SocketTimeoutException ste){
