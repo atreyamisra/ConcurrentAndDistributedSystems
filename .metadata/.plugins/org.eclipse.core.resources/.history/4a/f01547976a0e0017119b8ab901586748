@@ -128,7 +128,6 @@ public class MultithreadedServer extends Thread{
     }
     public synchronized static String processMessage(String m){
     	m = m.trim();
-    	Server.lamport.pollFirst();
     	System.out.println("CS Entered on: " + m);
     	String[] n = m.split(" ");
     	if(n[0].equals("purchase")){

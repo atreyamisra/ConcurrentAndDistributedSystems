@@ -24,7 +24,7 @@ public class LamportClientThread extends Thread{
     }
     public void run(){
     	while(true){
-    		while(!Server.request.get(sid) && !Server.release.get(sid));
+    		while(!Server.request.get(sid) || !Server.release.get(sid));
     		if(Server.request.get(sid)){
         		if(checkServer()){
         			requestCS();
@@ -44,12 +44,12 @@ public class LamportClientThread extends Thread{
     }
     private synchronized static void releaseCS(){
       	printStream.println("release");
-//    	try {
-//  			message = bufferedReader.readLine();
-//  		} catch(SocketTimeoutException ste){
-//  		} catch (IOException e) {
-//  			e.printStackTrace();
-//  		}
+    	try {
+  			message = bufferedReader.readLine();
+  		} catch(SocketTimeoutException ste){
+  		} catch (IOException e) {
+  			e.printStackTrace();
+  		}
     }
     private synchronized static void requestCS(){
     	String request = Server.requester;

@@ -44,6 +44,7 @@ public class Lamport extends Thread{
 	}
 	private synchronized String processMessage(String message){
 		if(message.equals("release")){
+			System.out.println("release message obtained");
 			String tokens = Server.lamport.pollFirst();
 			String process = tokens.substring(tokens.indexOf(' ', tokens.indexOf(' ')+1)+1);
 			MultithreadedServer.processMessage(process);
@@ -58,6 +59,7 @@ public class Lamport extends Thread{
 			return "";
 		}
 		else{
+			System.out.println("other message obtained");
 			addToList(message, false);
 			return message;
 		}

@@ -128,8 +128,6 @@ public class MultithreadedServer extends Thread{
     }
     public synchronized static String processMessage(String m){
     	m = m.trim();
-    	Server.lamport.pollFirst();
-    	System.out.println("CS Entered on: " + m);
     	String[] n = m.split(" ");
     	if(n[0].equals("purchase")){
     		String state = editInventory(n[2],Integer.valueOf(n[3]), true, false);
