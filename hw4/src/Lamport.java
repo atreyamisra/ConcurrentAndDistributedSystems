@@ -35,9 +35,6 @@ public class Lamport extends Thread{
 	  	  				if(!response.equals(""))
 	  	  					printStream.println(response);
 	  	  				message = bufferedReader.readLine();
-	  	  				if(Server.wantCS==true){
-	  	  					requestCS();
-	  	  				}
 	  	  			  }
 	  			  
 	  		  }
@@ -57,7 +54,7 @@ public class Lamport extends Thread{
 			return message;
 		}
 	}
-	private synchronized void addToList(String message){
+	public synchronized static void addToList(String message){
 		String requestID = message.substring(0, message.indexOf(' ', message.indexOf(' ')+1)+1);
 		String[] requestTick = requestID.split(" ");
 		int tick = Integer.valueOf(requestTick[0]);
@@ -83,27 +80,4 @@ public class Lamport extends Thread{
 			}
 		}
 	}
-/*    private synchronized static void lamport(){
-    	Socket[] server = new Socket[Server.numServers];
-    	for(int i = 0; i<Server.numServers; i++){
-    		if(i!=Server.myPort){
-        		try {
-    				server[i]=new Socket(Server.addresses.get(i), Server.ports.get(i));
-        		} catch (UnknownHostException e) {
-    				e.printStackTrace();
-        		} catch (IOException e) {
-    				//alive = false;
-    		  }
-    		}
-    	}
-    	for(int i = 0; i<Server.numServers; i++){
-    		if(!checkServer(server[i])){
-    			Server.addresses.remove(i);
-    			Server.ports.remove(i);
-    			Server.numServers--;
-    		}
-    	}
-    }
-*/
-
 }

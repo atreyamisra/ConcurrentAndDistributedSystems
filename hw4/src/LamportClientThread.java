@@ -20,7 +20,7 @@ public class LamportClientThread extends Thread{
     public LamportClientThread(String serverIP, int portNumber, int serverID){
     	ip = serverIP;
     	port=portNumber;
-    	int sid=serverID;
+    	int sid=serverID-1;
     }
     public void run(){
     	while(true){
@@ -29,15 +29,34 @@ public class LamportClientThread extends Thread{
     			requestCS();
         		Server.request.set(sid, false);
     		}
-    		else
+    		else{
+    			Server.dead.set(sid, true);
+    			Server.numAlive--;
     			break;
+    		}
+    			
     	}
     }
+    private synchronized static void releaseCS(){
+      	printStream.println(Server.ID + " release");
+    	try {
+  			message = bufferedReader.readLine();
+  		} catch(SocketTimeoutException ste){
+  		} catch (IOException e) {
+  			e.printStackTrace();
+  		}
+    }
     private synchronized static void requestCS(){
-		Server.clock.tick();
-    	String request = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
+    	String request = Server.requester;
     	printStream.println(request);
-    		
+      	try {
+  			message = bufferedReader.readLine();
+  		} catch(SocketTimeoutException ste){
+  		} catch (IOException e) {
+  			e.printStackTrace();
+  		}
+      	if(message.equals(request))
+      		Server.nod.put(request, Server.nod.get(request)+1);
     }
     private static boolean checkServer(){
   	  boolean alive = true;

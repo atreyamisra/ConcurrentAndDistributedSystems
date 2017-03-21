@@ -55,11 +55,17 @@ public class MultithreadedServer extends Thread{
   		  System.err.println(e);
   	  }
     }
-    private synchronized void askForCS(){
-    		Server.message=message;  
+    private void askForCS(){
+    	try {
+			Server.s.acquire();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    		Server.top=false;
+    		Server.message=message;
     		Server.wantCS = true;
-			  
-			  while(!Server.acknowledgements & !Server.top);
+			  while((Server.nod.get(Server.requester)<Server.numAlive)&&!Server.top);
 			  String response=processMessage(message);
 			  printStream.println(response);
 			  try {
@@ -68,6 +74,7 @@ public class MultithreadedServer extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
     }
     public synchronized static String processMessage(String m){
     	m = m.trim();

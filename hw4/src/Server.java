@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.concurrent.Semaphore;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,16 +20,20 @@ public class Server {
 	public static int numServers; //the total number of servers
 	public static String myAddress; //this server's IP
 	public static int myPort;
+	public static int numAlive;
 	public static ArrayList<String> addresses; //the list of servers' addresses
 	public static ArrayList<Integer> ports; //the list of servers' ports
 	public static ArrayList<Boolean> dead;
 	public static ArrayList<Boolean> request;
+	public static Hashtable<String, Integer> nod;
+    public static Semaphore s = new Semaphore(1, true);
 	public static LogicalClock clock;
     public static Hashtable<String, Integer> items = new Hashtable<String, Integer>(); //the inventory
     public static boolean acknowledgements;
     public static boolean top;
     public static boolean wantCS;
     public static String message;
+    public static String requester;
     public static LinkedList<String> lamport;
 	
 	public static void main(String[] args){
@@ -44,6 +49,7 @@ public class Server {
 			try{
 				ID = Integer.parseInt(inputs[0]);
 				numServers = Integer.parseInt(inputs[1]);
+				numAlive = numServers;
 				inventory = inputs[2];
 			}
 			catch(Exception e){

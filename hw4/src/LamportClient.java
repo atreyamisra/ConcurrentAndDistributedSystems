@@ -14,32 +14,30 @@ public class LamportClient extends Thread{
 		while(true){
 			while(!Server.wantCS);
 			Server.clock.tick();
+			Server.requester = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
+			Server.nod.put(Server.requester, 0);
+			Lamport.addToList(Server.requester);
 			if(f){
-				for(int i = 0;i<Server.addresses.size();i++){
+				for(int i = 1;i<=Server.addresses.size();i++){
 					if(i!=Server.ID){
 						LamportClientThread t = new LamportClientThread(Server.addresses.get(i), Server.ports.get(i), i);
-						String request = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
-						Server.lamport.add(request);
 						t.start();
+						Server.request.add(true);
 					}
 				}
 				f=false;
 			}
 			else{
-				for(int i = 0;i<Server.addresses.size();i++){
+				for(int i = 0;i<Server.numServers;i++){
 					Server.request.set(i, true);
-					String request = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
-					Server.lamport.add(request);
 				}
-				
+				for(int i = 0;i<Server.numServers;i++){
+					if(!Server.dead.get(i) && (i!=(Server.ID-1)))
+						while(Server.request.get(i));
+				}
 			}
 			Server.wantCS = false;
+			Server.s.release(); //allow other clients to ask for the CS
 		}
 	}
-    private synchronized static void requestCS(){
-    	Server.clock.tick();
-    	String request = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
-    	printStream.println(request);
-    	Server.lamport.add(request);	
-    }
 }
