@@ -74,9 +74,11 @@ public class MultithreadedServer extends Thread{
 			if(first){
 				for(int i = 0;i<Server.addresses.size();i++){
 					if(i!=Server.ID){
-						LamportClientThread t = new LamportClientThread(Server.addresses.get(i), Server.ports.get(i), i);
-						Server.request.set(i,true); //send message to this server
-						t.start();
+						if(!Server.dead.get(i) && (i!=(Server.ID-1))){
+							LamportClientThread t = new LamportClientThread(Server.addresses.get(i), Server.ports.get(i), i);
+							Server.request.add(true); //send message to this server
+							t.start();
+						}
 					}
 				}
 				for(int i = 0;i<Server.numServers;i++){
