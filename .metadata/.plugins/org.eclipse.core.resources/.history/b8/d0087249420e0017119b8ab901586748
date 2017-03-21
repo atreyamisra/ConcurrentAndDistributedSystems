@@ -70,7 +70,7 @@ public class MultithreadedServer extends Thread{
 			String requester = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
 			Server.requester=requester;
 			Server.nod.put(requester, 0);
-			Lamport.addToList(requester, true);
+			Lamport.addToList(requester);
 			if(first){
 				for(int i = 1;i<=Server.addresses.size();i++){
 					if(i!=Server.ID){

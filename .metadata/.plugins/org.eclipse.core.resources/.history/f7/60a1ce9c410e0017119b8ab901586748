@@ -56,17 +56,16 @@ public class Lamport extends Thread{
 			return "";
 		}
 		else{
-			addToList(message, false);
+			addToList(message);
 			return message;
 		}
 	}
-	public synchronized static void addToList(String message, boolean local){
+	public synchronized static void addToList(String message){
 		String requestID = message.substring(0, message.indexOf(' ', message.indexOf(' ')+1)+1);
 		String[] requestTick = requestID.split(" ");
 		int tick = Integer.valueOf(requestTick[0]);
 		int sid = Integer.valueOf(requestTick[1]);
-		if(!local)
-			Server.clock.recieveAction(tick);
+		Server.clock.recieveAction(tick);
 		for(int i = 0; i<=Server.lamport.size(); i++){
 			if(i==Server.lamport.size()){
 				Server.lamport.add(message);

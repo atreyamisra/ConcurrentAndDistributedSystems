@@ -35,7 +35,7 @@ public class Server {
     public static volatile boolean wantCS;
     public static volatile String requester;
     public static volatile String message;
-    public static volatile LinkedList<String> lamport = new LinkedList<String>();
+    public static volatile LinkedList<String> lamport;
 	
 	public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);
