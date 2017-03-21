@@ -73,7 +73,6 @@ public class LamportClientThread extends Thread{
   				e.printStackTrace();
   		  } catch (IOException e) {
   				alive = false;
-  				return alive;
   		  }
   	  }
   	  try {
@@ -106,10 +105,6 @@ public class LamportClientThread extends Thread{
   		} catch (IOException e) {
   			e.printStackTrace();
   		}
-      	if(message==null){
-      		alive=false;
-      		return alive;
-      	}	
       	if(!message.equals("hello"))
       		alive = false;
   	    if(alive)
