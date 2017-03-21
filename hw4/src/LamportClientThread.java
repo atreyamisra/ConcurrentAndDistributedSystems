@@ -20,21 +20,26 @@ public class LamportClientThread extends Thread{
     public LamportClientThread(String serverIP, int portNumber, int serverID){
     	ip = serverIP;
     	port=portNumber;
-    	sid=serverID-1;
+    	sid=serverID;
     }
     public void run(){
     	while(true){
-    		while(!Server.request.get(sid));
-    		if(checkServer()){
-    			requestCS();
-        		Server.request.set(sid, false);
+    		while(!Server.request.get(sid) || !Server.release.get(sid));
+    		if(Server.request.get(sid)){
+        		if(checkServer()){
+        			requestCS();
+            		Server.request.set(sid, false);
+        		}
+        		else{
+        			Server.dead.set(sid, true);
+        			Server.numAlive--;
+        			break;
+        		}
     		}
-    		else{
-    			Server.dead.set(sid, true);
-    			Server.numAlive--;
-    			break;
+    		else if(Server.release.get(sid)){
+    			releaseCS();
+    			Server.release.set(sid, false);
     		}
-    			
     	}
     }
     private synchronized static void releaseCS(){

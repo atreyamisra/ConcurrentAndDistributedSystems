@@ -15,9 +15,9 @@ public class LamportClient extends Thread{
 			while(!Server.wantCS);
 			Server.clock.tick();
 			Server.requester = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
-			Server.newRequest=true;
+			//Server.newRequest=true;
 			Server.nod.put(Server.requester, 0);
-			Lamport.addToList(Server.requester);
+			//Lamport.addToList(Server.requester);
 			if(f){
 				for(int i = 1;i<=Server.addresses.size();i++){
 					if(i!=Server.ID){

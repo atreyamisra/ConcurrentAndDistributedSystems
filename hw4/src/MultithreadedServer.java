@@ -72,7 +72,7 @@ public class MultithreadedServer extends Thread{
 			Server.nod.put(requester, 0);
 			Lamport.addToList(requester, true);
 			if(first){
-				for(int i = 1;i<=Server.addresses.size();i++){
+				for(int i = 0;i<Server.addresses.size();i++){
 					if(i!=Server.ID){
 						LamportClientThread t = new LamportClientThread(Server.addresses.get(i), Server.ports.get(i), i);
 						Server.request.add(true); //send message to this server
@@ -99,10 +99,26 @@ public class MultithreadedServer extends Thread{
 			
 			
 			while((Server.nod.get(requester)<Server.numAlive) && (!Server.top) && (!Server.lamport.peek().equals(requester))); //waits for all requests to bounce back, the server to notice top of linked list is its server, and that the command at top is assciated with specific client
-			  	Server.top=false;
-				String response=processMessage(message);
-			  printStream.println(response); // sends message back to client
-			  try {
+			Server.top=false;
+			String response=processMessage(message); // sends message back to client
+			printStream.println(response);
+			
+			try {
+				Server.t.acquire();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			for(int i = 0;i<Server.numServers;i++){
+				Server.release.set(i, true); //signals threads that they can send release message
+			}
+			for(int i = 0;i<Server.numServers;i++){
+				if(!Server.dead.get(i) && (i!=(Server.ID-1)))
+					while(Server.release.get(i)); //waits for all threads connected to each server to send release
+			}
+			Server.t.release();
+			
+			try {
 				message = bufferedReader.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

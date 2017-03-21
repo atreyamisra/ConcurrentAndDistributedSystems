@@ -25,6 +25,7 @@ public class Server {
 	public static ArrayList<Integer> ports= new ArrayList<Integer>(); //the list of servers' ports
 	public static volatile ArrayList<Boolean> dead  = new ArrayList<Boolean>();
 	public static volatile ArrayList<Boolean> request = new ArrayList<Boolean>();
+    public static volatile ArrayList<Boolean> release = new ArrayList<Boolean>();
 	public static volatile Hashtable<String, Integer> nod=new Hashtable<String, Integer>();
     public static Semaphore s = new Semaphore(1, true);
     public static Semaphore t = new Semaphore(1, true);
@@ -71,6 +72,7 @@ public class Server {
 					addresses.add(parsed[0]);
 					dead.add(false);
 					request.add(false);
+					release.add(false);
 				}
 				catch(Exception e){
 					inputOK = false;
