@@ -22,21 +22,6 @@ public class Client {
     
 	
   public static void main (String[] args) {
-    String hostAddress;
-    int tcpPort;
-    int udpPort;
-    if (args.length != 3) {
-      System.out.println("ERROR: Provide 3 arguments");
-      System.out.println("\t(1) <hostAddress>: the address of the server");
-      System.out.println("\t(2) <tcpPort>: the port number for TCP connection");
-      System.out.println("\t(3) <udpPort>: the port number for UDP connection");
-      System.exit(-1);
-    }
-
-    hostAddress = args[0];
-    tcpPort = Integer.parseInt(args[1]);
-    udpPort = Integer.parseInt(args[2]);
-    
     Scanner sc = new Scanner(System.in);
     int n = Integer.valueOf(sc.nextLine());
     ip = new String[n];
@@ -54,12 +39,12 @@ public class Client {
       boolean isIntP = true;
       boolean isIntO = true;
   	  try {
-		    int quant = Integer.parseInt(tokens[3]);
+		    Integer.parseInt(tokens[3]);
 		  } catch (Exception e) {
 		    isIntP = false;
 		  }
   	  try {
-		    int quant = Integer.parseInt(tokens[1]);
+		    Integer.parseInt(tokens[1]);
 		  } catch (Exception e) {
 		    isIntO = false;
 		  }
@@ -160,14 +145,17 @@ public class Client {
 				e.printStackTrace();
 		  } catch (IOException e) {
 				alive = false;
+				return alive;
 		  }
 	  }
+	  
 	  try {
 			s.setSoTimeout(100);
 		} catch (SocketException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			System.out.println("Fuck");
+			//e2.printStackTrace();
 		}
+	  
 	  try {
 			input = s.getInputStream();
 	  } catch (IOException e1) {
@@ -179,27 +167,34 @@ public class Client {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+	    
 	    printStream = new PrintStream(output);
 	  	inputStream = new InputStreamReader(input);
 	  	bufferedReader = new BufferedReader(inputStream);
 	  	message = null;
 	    String check = "hi";
 	  	printStream.println(check);
+	  	
     	try {
 			message = bufferedReader.readLine();
 		} catch(SocketTimeoutException ste){
 			alive = false;
+			return alive;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	if(!message.equals("hi"))
+    	
+    	if(!message.equals("hi")){
     		alive = false;
+    		return alive;
+    	}
 	    if(alive)
 			try {
 				s.setSoTimeout(0);
 			} catch (SocketException e) {
 				e.printStackTrace();
 			}
+	    
 	  return alive;
   }
 

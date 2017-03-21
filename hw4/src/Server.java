@@ -21,21 +21,20 @@ public class Server {
 	public static String myAddress; //this server's IP
 	public static int myPort;
 	public static volatile int numAlive;
-	public static ArrayList<String> addresses; //the list of servers' addresses
-	public static ArrayList<Integer> ports; //the list of servers' ports
-	public static ArrayList<Boolean> dead;
-	public static volatile ArrayList<Boolean> request;
-	public static ArrayList<Boolean> release;
-	public static volatile Hashtable<String, Integer> nod;
+	public static ArrayList<String> addresses= new ArrayList<String>(); //the list of servers' addresses
+	public static ArrayList<Integer> ports= new ArrayList<Integer>(); //the list of servers' ports
+	public static volatile ArrayList<Boolean> dead  = new ArrayList<Boolean>();
+	public static volatile ArrayList<Boolean> request = new ArrayList<Boolean>();
+	public static volatile Hashtable<String, Integer> nod=new Hashtable<String, Integer>();
     public static Semaphore s = new Semaphore(1, true);
     public static Semaphore t = new Semaphore(1, true);
-	public static LogicalClock clock;
+	public static volatile LogicalClock clock;
     public static Hashtable<String, Integer> items = new Hashtable<String, Integer>(); //the inventory
     public static boolean acknowledgements;
     public static volatile boolean top=false;
     public static volatile boolean wantCS;
-    public static String message;
-    public static String requester;
+    public static volatile String requester;
+    public static volatile String message;
     public static volatile LinkedList<String> lamport;
 	
 	public static void main(String[] args){
@@ -51,7 +50,7 @@ public class Server {
 			try{
 				ID = Integer.parseInt(inputs[0]);
 				numServers = Integer.parseInt(inputs[1]);
-				numAlive = numServers;
+				numAlive = numServers-1;
 				inventory = inputs[2];
 			}
 			catch(Exception e){
@@ -119,9 +118,5 @@ public class Server {
 		//Listening
 		ConnectionListener listener = new ConnectionListener(myPort);
 		listener.start();
-		
-		//Start the thread which starts links with other servers
-		LamportClient client = new LamportClient(true);
-		client.start();
 	}
 }

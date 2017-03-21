@@ -34,25 +34,27 @@ public class ConnectionListener extends Thread{
 	  		try {
 				input = s.getInputStream();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("ConnectionListener error - couldn't get input stream");
 			}
+	  		
 			try {
 				output = s.getOutputStream();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("ConnectionListener error - couldn't get output stream");
 			}
+			
 			printStream = new PrintStream(output);
 			inputStream = new InputStreamReader(input);
 			bufferedReader = new BufferedReader(inputStream);
 			String message = null;
+			
 			try{
 				message = bufferedReader.readLine();
 			}
 			catch(IOException i){
 				System.out.println("ConnectionListener error - couldn't read buffer");
 			}
+			
   			if(message.equals("hi")){
   				printStream.println(message);
   				Thread t = new MultithreadedServer(s);

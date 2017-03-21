@@ -36,7 +36,6 @@ public class MultithreadedServer extends Thread{
 		  printStream = new PrintStream(output);
 		  inputStream = new InputStreamReader(input);
 		  bufferedReader = new BufferedReader(inputStream);
-		  String message = null;
 		  message=bufferedReader.readLine();
   		  while(message!=null){
   	  			  if(message.equals("hi")){
@@ -64,7 +63,7 @@ public class MultithreadedServer extends Thread{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-    		//Server.message=message;
+    		Server.message=message;
     		
     		
 			Server.clock.tick();
@@ -76,9 +75,13 @@ public class MultithreadedServer extends Thread{
 				for(int i = 1;i<=Server.addresses.size();i++){
 					if(i!=Server.ID){
 						LamportClientThread t = new LamportClientThread(Server.addresses.get(i), Server.ports.get(i), i);
-						Server.request.add(true);
+						Server.request.add(true); //send message to this server
 						t.start();
 					}
+				}
+				for(int i = 0;i<Server.numServers;i++){
+					if(!Server.dead.get(i) && (i!=(Server.ID-1)))
+						while(Server.request.get(i)); //waits for all threads connected to each server sends request
 				}
 				first=false;
 			}
