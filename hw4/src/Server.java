@@ -30,12 +30,13 @@ public class Server {
     public static Semaphore s = new Semaphore(1, true);
     public static Semaphore t = new Semaphore(1, true);
 	public static volatile LogicalClock clock;
-    public static Hashtable<String, Integer> items = new Hashtable<String, Integer>(); //the inventory
+    public static volatile Hashtable<String, Integer> items = new Hashtable<String, Integer>(); //the inventory
     public static boolean acknowledgements;
     public static volatile boolean top=false;
     public static volatile boolean wantCS;
     public static volatile String requester;
     public static volatile String message;
+    public static volatile boolean first = true;
     public static volatile LinkedList<String> lamport = new LinkedList<String>();
 	
 	public static void main(String[] args){

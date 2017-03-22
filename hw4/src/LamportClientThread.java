@@ -24,13 +24,20 @@ public class LamportClientThread extends Thread{
     }
     public void run(){
     	while(true){
+    		System.out.println("outputstream deadlock checkpoint 0");
+    		System.out.println(Server.request.get(sid));
     		while(!Server.request.get(sid) && !Server.release.get(sid));
+    		System.out.println("outputstream deadlock checkpoint 0.5");
+    		System.out.println(Server.request.get(sid));
     		if(Server.request.get(sid)){
         		if(checkServer()){
+        			System.out.println("outputstream deadlock checkpoint 1");
         			requestCS();
             		Server.request.set(sid, false);
+            		System.out.println("outputstream deadlock checkpoint 9");
         		}
         		else{
+        			System.out.println("outputstream deadlock checkpoint 1.5");
         			Server.dead.set(sid, true);
         			Server.numAlive--;
         			break;
@@ -44,18 +51,15 @@ public class LamportClientThread extends Thread{
     }
     private synchronized static void releaseCS(){
       	printStream.println("release");
-//    	try {
-//  			message = bufferedReader.readLine();
-//  		} catch(SocketTimeoutException ste){
-//  		} catch (IOException e) {
-//  			e.printStackTrace();
-//  		}
     }
     private synchronized static void requestCS(){
+    	System.out.println("outputstream deadlock checkpoint 2");
     	String request = Server.requester;
     	printStream.println(request);
+    	System.out.println("outputstream deadlock checkpoint 3");
       	try {
   			message = bufferedReader.readLine();
+  			System.out.println("outputstream deadlock checkpoint 4");
   		} catch(SocketTimeoutException ste){
   		} catch (IOException e) {
   			e.printStackTrace();
@@ -104,7 +108,7 @@ public class LamportClientThread extends Thread{
   		} catch(SocketTimeoutException ste){
   			alive = false;
   		} catch (IOException e) {
-  			e.printStackTrace();
+  			alive = false;
   		}
       	if(message==null){
       		alive=false;

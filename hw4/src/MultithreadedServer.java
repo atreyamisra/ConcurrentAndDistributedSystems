@@ -21,7 +21,6 @@ public class MultithreadedServer extends Thread{
 	Socket theClient;
 	private static Hashtable<String, Integer> items = Server.items;
 	private static OrderLog ol = new OrderLog();
-    private static boolean first = true;
     private static int myTimestamp = 0; //holds the time stamp for the current request
     
     
@@ -48,7 +47,7 @@ public class MultithreadedServer extends Thread{
   	  				  }  
   	  			  }
   	  			  else{
-  	  				  //System.out.println(message + " " +Server.ID);
+  	  				  System.out.println("deadlock checkpoint 1");
   	  				  askForCS();
   	  			  }
   		  }
@@ -65,34 +64,39 @@ public class MultithreadedServer extends Thread{
 			e1.printStackTrace();
 		}
     		Server.message=message;
-    		
+    		System.out.println("deadlock checkpoint 2");
     		
 			Server.clock.tick();
 			String requester = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
 			Server.requester=requester;
 			Server.nod.put(requester, 0);
 			Lamport.addToList(requester, true);
-			if(first){
+			if(Server.first){
 				for(int i = 0;i<Server.addresses.size();i++){
 					if(i!=(Server.ID-1)){
 						LamportClientThread t = new LamportClientThread(Server.addresses.get(i), Server.ports.get(i), i);
 						Server.request.set(i,true); //send message to this server
 						t.start();
+						System.out.println("deadlock checkpoint 3");
 					}
 				}
 				for(int i = 0;i<Server.numServers;i++){
+					System.out.println("deadlock checkpoint 3.5");
 					if(!Server.dead.get(i) && (i!=(Server.ID-1)))
-						while(Server.request.get(i)); //waits for all threads connected to each server sends request
+						while(Server.request.get(i) && !Server.dead.get(i));//waits for all threads connected to each server to send request
+					System.out.println("deadlock checkpoint 4");
 				}
-				first=false;
+				Server.first=false;
 			}
 			else{
 				for(int i = 0;i<Server.numServers;i++){
 					Server.request.set(i, true); //signals threads that they can start sending the request
+					System.out.println("deadlock checkpoint 5");
 				}
 				for(int i = 0;i<Server.numServers;i++){
 					if(!Server.dead.get(i) && (i!=(Server.ID-1)))
-						while(Server.request.get(i)); //waits for all threads connected to each server sends request
+						while(Server.request.get(i) && !Server.dead.get(i)); //waits for all threads connected to each server sends request
+					System.out.println("deadlock checkpoint 6");
 				}
 			}
 
@@ -100,9 +104,13 @@ public class MultithreadedServer extends Thread{
 			
 			
 			while((Server.nod.get(requester)<Server.numAlive) && (!Server.top) && (!Server.lamport.peek().equals(requester))); //waits for all requests to bounce back, the server to notice top of linked list is its server, and that the command at top is associated with specific client
+			System.out.println("deadlock checkpoint 7");
 			Server.top=false;
+			System.out.println(Server.ID+" "+ message);
 			String response=processMessage(message); //processes clients message and makes a string response
+			System.out.println(Server.ID+" "+ response);
 			printStream.println(response);// sends message back to client
+			System.out.println("deadlock checkpoint 8");
 			
 			try {
 				Server.t.acquire();
@@ -115,7 +123,7 @@ public class MultithreadedServer extends Thread{
 			}
 			for(int i = 0;i<Server.numServers;i++){
 				if(!Server.dead.get(i) && (i!=(Server.ID-1)))
-					while(Server.release.get(i)); //waits for all threads connected to each server to send release
+					while(Server.release.get(i)&&!Server.dead.get(i)); //waits for all threads connected to each server to send release
 			}
 			Server.t.release();
 			

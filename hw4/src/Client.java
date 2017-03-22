@@ -29,7 +29,7 @@ public class Client {
     	ip[i] = tokens[0];
     	port[i] = Integer.valueOf(tokens[1]);
     }
-      
+
     while(sc.hasNextLine()) {
       String cmd = sc.nextLine();
       String[] tokens = cmd.split(" ");
@@ -46,88 +46,111 @@ public class Client {
 		    isIntO = false;
 		  }
       if (tokens[0].equals("purchase") && tokens.length==4 && isIntP) {
-        	while(death){
-        		death=false;
-        		ind++;
-              	while(!checkServer(ind)){
-            		first = true;
-            	}
-        		tcpMethod(cmd, tokens[0]);
-        	}
-        	while(!checkServer(ind)){
-        		first = true;
-        		ind++;
-        	}
-        	tcpMethod(cmd, tokens[0]);
+    	  if(first == true){
+    		  first = false;
+    	      while(!checkServer(ind)){
+    		  	   ind++;
+    	      }
+    	  }
+    	  tcpMethod(cmd, tokens[0]);
+    	  while(death==true){
+        	  while(!checkServer(ind)){
+            		ind++;
+        	  }
+        	  tcpMethod(cmd, tokens[0]);
+        	  if(death==true)
+        		  ind++;
+    	  }
       } else if (tokens[0].equals("cancel") && tokens.length==2 && isIntO) {
-      	while(death){
-    		death=false;
-    		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
-        	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
+    	  if(first == true){
+    		  first = false;
+    	      while(!checkServer(ind)){
+    		  	   ind++;
+    	      }
+    	  }
+    	  tcpMethod(cmd, tokens[0]);
+    	  while(death==true){
+        	  while(!checkServer(ind)){
+            		ind++;
+        	  }
+        	  tcpMethod(cmd, tokens[0]);
+        	  if(death==true)
+        		  ind++;
+    	  }
       } else if (tokens[0].equals("search") && tokens.length==2) {
-      	while(death){
-    		death=false;
-    		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
-        	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
+    	  if(first == true){
+    		  first = false;
+    	      while(!checkServer(ind)){
+    		  	   ind++;
+    	      }
+    	  }
+    	  tcpMethod(cmd, tokens[0]);
+    	  while(death==true){
+        	  while(!checkServer(ind)){
+            		ind++;
+        	  }
+        	  tcpMethod(cmd, tokens[0]);
+        	  if(death==true)
+        		  ind++;
+    	  }
       } else if (tokens[0].equals("list") && tokens.length==1) {
-      	while(death){
-    		death=false;
-    		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
-        	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
+    	  if(first == true){
+    		  first = false;
+    	      while(!checkServer(ind)){
+    		  	   ind++;
+    	      }
+    	  }
+    	  tcpMethod(cmd, tokens[0]);
+    	  while(death==true){
+        	  while(!checkServer(ind)){
+            		ind++;
+        	  }
+        	  tcpMethod(cmd, tokens[0]);
+        	  if(death==true)
+        		  ind++;
+    	  }
       } else {
         System.out.println("ERROR: No such command");
       }
     }
   }
   private static void tcpMethod(String output, String action){
+	  	death=false;
 	  	printStream.println(output);
 	  	if(action.equals("purchase")){
 	    	try {
 				message = bufferedReader.readLine();
 	    	} catch(SocketTimeoutException ste){
 	    		death = true;
+	    		//System.out.println("1");
 				return;	
 			} catch (IOException e) {
-				e.printStackTrace();
+				death = true;
+				//e.printStackTrace();
+				return;
 			}
-	    	System.out.println(message);	
+	    	if(message==null){
+	    		death=true;
+	    		return;
+	    	}
+	    	System.out.println(message);
 	  	}
 	  	else if(action.equals("cancel")){
 	    	try {
 				message = bufferedReader.readLine();
 	    	} catch(SocketTimeoutException ste){
 	    		death = true;
+	    		//System.out.println("2");
 				return;	
 			} catch (IOException e) {
-				e.printStackTrace();
+				death = true;
+				//e.printStackTrace();
+				return;
 			}
+	    	if(message==null){
+	    		death=true;
+	    		return;
+	    	}
 	    	System.out.println(message);
 	  	}
 	  	else if(action.equals("search")){
@@ -135,10 +158,17 @@ public class Client {
 				message = bufferedReader.readLine();
 	    	} catch(SocketTimeoutException ste){
 	    		death = true;
+	    		//System.out.println("3");
 				return;	
 			} catch (IOException e) {
-				e.printStackTrace();
+				death = true;
+				//e.printStackTrace();
+				return;
 			}
+	    	if(message==null){
+	    		death=true;
+	    		return;
+	    	}
 	    	if(message.substring(0, 1).equals("N")){
 	    		System.out.println(message);
 	    	}
@@ -157,13 +187,19 @@ public class Client {
 	  	else if(action.equals("list")){
 	    	try {
 				message = bufferedReader.readLine();
-	    	} catch(SocketTimeoutException ste){
+			} catch(SocketTimeoutException ste){
 				death = true;
-				System.out.println("timeout exception");
+				//System.out.println("4");
 				return;
 			} catch (IOException e) {
-				e.printStackTrace();
+				death = true;
+				//e.printStackTrace();
+				return;
 			}
+	    	if(message==null){
+	    		death=true;
+	    		return;
+	    	}	
 	    	int n = Integer.valueOf(message);
 	    	for(int i = 0; i<n; i++){
 		    	try {
@@ -180,7 +216,6 @@ public class Client {
   
   private static boolean checkServer(int index){
 	  boolean alive = true;
-	  if(first){
 		  try {
 				s=new Socket(ip[index], port[index]);
 		  } catch (UnknownHostException e) {
@@ -226,23 +261,14 @@ public class Client {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+	    	
+	  
+	  
+	    	if(!message.equals("hi")){
+	    		alive = false;
+	    		return alive;
+	    	}
 	    	return alive;
-	  }
-	  return alive;
-	  
-	  
-/*    	if(!message.equals("hi")){
-    		alive = false;
-    		return alive;
-    	}
-	    if(alive)
-			try {
-				s.setSoTimeout(0);
-			} catch (SocketException e) {
-				e.printStackTrace();
-			}
-	    
-	    return alive;
-*/  }
+  }
 
 }

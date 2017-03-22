@@ -57,6 +57,7 @@ public class ConnectionListener extends Thread{
 			
   			if(message.equals("hi")){
   				printStream.println(message);
+  				System.out.println("initial contact");
   				Thread t = new MultithreadedServer(s);
   				t.start();
   			}
