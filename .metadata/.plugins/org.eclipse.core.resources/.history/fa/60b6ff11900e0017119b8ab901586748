@@ -48,7 +48,6 @@ public class MultithreadedServer extends Thread{
   	  				  }  
   	  			  }
   	  			  else{
-  	  				  //System.out.println(message + " " +Server.ID);
   	  				  askForCS();
   	  			  }
   		  }

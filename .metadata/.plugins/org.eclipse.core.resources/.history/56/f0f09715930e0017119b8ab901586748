@@ -46,61 +46,61 @@ public class Client {
 		    isIntO = false;
 		  }
       if (tokens[0].equals("purchase") && tokens.length==4 && isIntP) {
-        	while(death){
-        		death=false;
+    	while(!checkServer(ind)){
+    		ind++;
+    		first = true;
+    	}
+    	tcpMethod(cmd, tokens[0]);
+    	while(death){
+    		death=false;
+          	while(!checkServer(ind)){
         		ind++;
-              	while(!checkServer(ind)){
-            		first = true;
-            	}
-        		tcpMethod(cmd, tokens[0]);
-        	}
-        	while(!checkServer(ind)){
         		first = true;
-        		ind++;
         	}
-        	tcpMethod(cmd, tokens[0]);
+    		tcpMethod(cmd, tokens[0]);
+    	}
       } else if (tokens[0].equals("cancel") && tokens.length==2 && isIntO) {
-      	while(death){
-    		death=false;
+      	while(!checkServer(ind)){
     		ind++;
+    		first = true;
+    	}
+      	tcpMethod(cmd, tokens[0]);
+    	while(death){
+    		death=false;
           	while(!checkServer(ind)){
+        		ind++;
         		first = true;
         	}
     		tcpMethod(cmd, tokens[0]);
     	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("search") && tokens.length==2) {
-      	while(death){
-    		death=false;
+      	while(!checkServer(ind)){
     		ind++;
+    		first = true;
+    	}
+      	tcpMethod(cmd, tokens[0]);
+    	while(death){
+    		death=false;
           	while(!checkServer(ind)){
+        		ind++;
         		first = true;
         	}
     		tcpMethod(cmd, tokens[0]);
     	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("list") && tokens.length==1) {
-      	while(death){
-    		death=false;
+      	while(!checkServer(ind)){
     		ind++;
+    		first = true;
+    	}
+    	tcpMethod(cmd, tokens[0]);
+    	while(death){
+    		death=false;
           	while(!checkServer(ind)){
+        		ind++;
         		first = true;
         	}
     		tcpMethod(cmd, tokens[0]);
     	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
       } else {
         System.out.println("ERROR: No such command");
       }

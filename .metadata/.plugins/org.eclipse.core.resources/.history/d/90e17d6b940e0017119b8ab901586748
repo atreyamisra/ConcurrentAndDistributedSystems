@@ -54,53 +54,37 @@ public class Client {
             	}
         		tcpMethod(cmd, tokens[0]);
         	}
-        	while(!checkServer(ind)){
-        		first = true;
-        		ind++;
-        	}
         	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("cancel") && tokens.length==2 && isIntO) {
-      	while(death){
-    		death=false;
-    		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
+        	while(death){
+        		death=false;
+        		ind++;
+              	while(!checkServer(ind)){
+            		first = true;
+            	}
+        		tcpMethod(cmd, tokens[0]);
         	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
+        	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("search") && tokens.length==2) {
-      	while(death){
-    		death=false;
-    		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
+        	while(death){
+        		death=false;
+        		ind++;
+              	while(!checkServer(ind)){
+            		first = true;
+            	}
+        		tcpMethod(cmd, tokens[0]);
         	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
+        	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("list") && tokens.length==1) {
-      	while(death){
-    		death=false;
-    		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
+        	while(death){
+        		death=false;
+        		ind++;
+              	while(!checkServer(ind)){
+            		first = true;
+            	}
+        		tcpMethod(cmd, tokens[0]);
         	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
+        	tcpMethod(cmd, tokens[0]);
       } else {
         System.out.println("ERROR: No such command");
       }

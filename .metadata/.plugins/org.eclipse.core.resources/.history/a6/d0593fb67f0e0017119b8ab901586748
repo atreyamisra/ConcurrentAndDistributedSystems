@@ -11,10 +11,13 @@ public class Client {
     private static InputStreamReader inputStream;
     private static BufferedReader bufferedReader;
     private static String message = null;
-    private static boolean death = false;
+    private static DatagramPacket sPacket, rPacket;
+    private static InetAddress ia;
+    private static DatagramSocket datasocket;
     private static String[] ip;
     private static int[] port;
     private static int ind = 0;
+    private final static int len = 65507;
     private static boolean first = true;
     
 	
@@ -46,59 +49,27 @@ public class Client {
 		    isIntO = false;
 		  }
       if (tokens[0].equals("purchase") && tokens.length==4 && isIntP) {
-        	while(death){
-        		death=false;
-        		ind++;
-              	while(!checkServer(ind)){
-            		first = true;
-            	}
-        		tcpMethod(cmd, tokens[0]);
-        	}
-        	while(!checkServer(ind)){
-        		first = true;
-        		ind++;
-        	}
-        	tcpMethod(cmd, tokens[0]);
+    	while(!checkServer(ind)){
+    		ind++;
+    		first = true;
+    	}
+    	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("cancel") && tokens.length==2 && isIntO) {
-      	while(death){
-    		death=false;
+      	while(!checkServer(ind)){
     		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
-        	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
     		first = true;
-    		ind++;
     	}
-    	tcpMethod(cmd, tokens[0]);
+      	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("search") && tokens.length==2) {
-      	while(death){
-    		death=false;
+      	while(!checkServer(ind)){
     		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
-        	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
     		first = true;
-    		ind++;
     	}
-    	tcpMethod(cmd, tokens[0]);
+      	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("list") && tokens.length==1) {
-      	while(death){
-    		death=false;
+      	while(!checkServer(ind)){
     		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
-        	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
     		first = true;
-    		ind++;
     	}
     	tcpMethod(cmd, tokens[0]);
       } else {
@@ -111,9 +82,6 @@ public class Client {
 	  	if(action.equals("purchase")){
 	    	try {
 				message = bufferedReader.readLine();
-	    	} catch(SocketTimeoutException ste){
-	    		death = true;
-				return;	
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -122,9 +90,6 @@ public class Client {
 	  	else if(action.equals("cancel")){
 	    	try {
 				message = bufferedReader.readLine();
-	    	} catch(SocketTimeoutException ste){
-	    		death = true;
-				return;	
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -133,9 +98,6 @@ public class Client {
 	  	else if(action.equals("search")){
 	    	try {
 				message = bufferedReader.readLine();
-	    	} catch(SocketTimeoutException ste){
-	    		death = true;
-				return;	
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -157,10 +119,6 @@ public class Client {
 	  	else if(action.equals("list")){
 	    	try {
 				message = bufferedReader.readLine();
-	    	} catch(SocketTimeoutException ste){
-				death = true;
-				System.out.println("timeout exception");
-				return;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -189,49 +147,43 @@ public class Client {
 				alive = false;
 				return alive;
 		  }
-		  try {
-				s.setSoTimeout(100);
-			} catch (SocketException e2) {
-				alive = false;
-				return alive;
-			}
-		  
-		  try {
-				input = s.getInputStream();
-		  } catch (IOException e1) {
-			  	alive = false;
-				return alive;
-			}
-		  	
-		    try {
-				output = s.getOutputStream();
-			} catch (IOException e1) {
-				alive = false;
-				return alive;
-			}
-		    
-		    printStream = new PrintStream(output);
-		  	inputStream = new InputStreamReader(input);
-		  	bufferedReader = new BufferedReader(inputStream);
-		  	message = null;
-		  	
-		    String check = "hi";
-		  	printStream.println(check);
-		  	
-	    	try {
-				message = bufferedReader.readLine();
-			} catch(SocketTimeoutException ste){
-				alive = false;
-				return alive;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	    	return alive;
 	  }
-	  return alive;
 	  
+	  try {
+			s.setSoTimeout(100);
+		} catch (SocketException e2) {
+			e2.printStackTrace();
+		}
 	  
-/*    	if(!message.equals("hi")){
+	  try {
+			input = s.getInputStream();
+	  } catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	  	
+	    try {
+			output = s.getOutputStream();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	    
+	    printStream = new PrintStream(output);
+	  	inputStream = new InputStreamReader(input);
+	  	bufferedReader = new BufferedReader(inputStream);
+	  	message = null;
+	    String check = "hi";
+	  	printStream.println(check);
+	  	
+    	try {
+			message = bufferedReader.readLine();
+		} catch(SocketTimeoutException ste){
+			alive = false;
+			return alive;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	if(!message.equals("hi")){
     		alive = false;
     		return alive;
     	}
@@ -242,7 +194,7 @@ public class Client {
 				e.printStackTrace();
 			}
 	    
-	    return alive;
-*/  }
+	  return alive;
+  }
 
 }

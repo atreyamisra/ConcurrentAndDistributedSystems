@@ -11,10 +11,10 @@ public class Client {
     private static InputStreamReader inputStream;
     private static BufferedReader bufferedReader;
     private static String message = null;
-    private static boolean death = false;
+    private static boolean death = true;
     private static String[] ip;
     private static int[] port;
-    private static int ind = 0;
+    private static int ind = -1;
     private static boolean first = true;
     
 	
@@ -54,53 +54,33 @@ public class Client {
             	}
         		tcpMethod(cmd, tokens[0]);
         	}
-        	while(!checkServer(ind)){
-        		first = true;
-        		ind++;
-        	}
-        	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("cancel") && tokens.length==2 && isIntO) {
-      	while(death){
-    		death=false;
-    		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
+        	while(death){
+        		death=false;
+        		ind++;
+              	while(!checkServer(ind)){
+            		first = true;
+            	}
+        		tcpMethod(cmd, tokens[0]);
         	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("search") && tokens.length==2) {
-      	while(death){
-    		death=false;
-    		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
+        	while(death){
+        		death=false;
+        		ind++;
+              	while(!checkServer(ind)){
+            		first = true;
+            	}
+        		tcpMethod(cmd, tokens[0]);
         	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
       } else if (tokens[0].equals("list") && tokens.length==1) {
-      	while(death){
-    		death=false;
-    		ind++;
-          	while(!checkServer(ind)){
-        		first = true;
+        	while(death){
+        		death=false;
+        		ind++;
+              	while(!checkServer(ind)){
+            		first = true;
+            	}
+        		tcpMethod(cmd, tokens[0]);
         	}
-    		tcpMethod(cmd, tokens[0]);
-    	}
-    	while(!checkServer(ind)){
-    		first = true;
-    		ind++;
-    	}
-    	tcpMethod(cmd, tokens[0]);
       } else {
         System.out.println("ERROR: No such command");
       }

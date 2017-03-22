@@ -1928,3 +1928,44 @@ java.lang.NullPointerException
 !MESSAGE Unhandled event loop exception
 !STACK 0
 java.lang.NullPointerException
+
+!ENTRY org.eclipse.ui 4 0 2017-03-21 18:06:42.268
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+
+!ENTRY org.eclipse.debug.core 4 125 2017-03-21 18:43:38.995
+!MESSAGE Error logged from Debug Core: 
+!STACK 0
+java.io.IOException: Broken pipe
+	at java.io.FileOutputStream.writeBytes(Native Method)
+	at java.io.FileOutputStream.write(FileOutputStream.java:326)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.eclipse.debug.internal.core.InputStreamMonitor.writeNext(InputStreamMonitor.java:149)
+	at org.eclipse.debug.internal.core.InputStreamMonitor.write(InputStreamMonitor.java:125)
+	at org.eclipse.debug.internal.core.InputStreamMonitor$1.run(InputStreamMonitor.java:100)
+	at java.lang.Thread.run(Thread.java:745)
+
+!ENTRY org.eclipse.ui 4 0 2017-03-21 18:45:58.353
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
+
+!ENTRY org.eclipse.debug.core 4 125 2017-03-21 18:47:43.985
+!MESSAGE Error logged from Debug Core: 
+!STACK 0
+java.io.IOException: Broken pipe
+	at java.io.FileOutputStream.writeBytes(Native Method)
+	at java.io.FileOutputStream.write(FileOutputStream.java:326)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at java.io.FilterOutputStream.close(FilterOutputStream.java:158)
+	at org.eclipse.debug.internal.core.InputStreamMonitor.write(InputStreamMonitor.java:129)
+	at org.eclipse.debug.internal.core.InputStreamMonitor$1.run(InputStreamMonitor.java:100)
+	at java.lang.Thread.run(Thread.java:745)
+
+!ENTRY org.eclipse.ui 4 0 2017-03-21 19:14:58.201
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.NullPointerException
