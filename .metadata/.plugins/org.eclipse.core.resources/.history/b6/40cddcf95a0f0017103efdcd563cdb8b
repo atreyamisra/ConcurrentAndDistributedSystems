@@ -103,7 +103,7 @@ public class MultithreadedServer extends Thread{
 
 			Server.s.release(); //allow other clients to ask for the CS
 			
-			System.out.println("important deadlock checkpoint, waiting to access CS");
+			
 			while((Server.nod.get(requester)<Server.numAlive) && (!Server.top) && (!Server.lamport.peek().equals(requester))); //waits for all requests to bounce back, the server to notice top of linked list is its server, and that the command at top is associated with specific client
 			System.out.println("deadlock checkpoint 7");
 			Server.top=false;
