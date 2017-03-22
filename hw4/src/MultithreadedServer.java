@@ -82,6 +82,7 @@ public class MultithreadedServer extends Thread{
 				}
 				for(int i = 0;i<Server.numServers;i++){
 					System.out.println("deadlock checkpoint 3.5");
+					System.out.println("deadlock when trying to contact server " + (i+1));
 					if(!Server.dead.get(i) && (i!=(Server.ID-1)))
 						while(Server.request.get(i) && !Server.dead.get(i));//waits for all threads connected to each server to send request
 					System.out.println("deadlock checkpoint 4");
