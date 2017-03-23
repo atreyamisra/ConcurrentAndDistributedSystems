@@ -12,12 +12,12 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class MultithreadedServer extends Thread{
-	private InputStream input;
-    private OutputStream output;
-    private PrintStream printStream;
-    private InputStreamReader inputStream;
-    private BufferedReader bufferedReader;
-    private String message = null;
+	private static InputStream input;
+    private static OutputStream output;
+    private static PrintStream printStream;
+    private static InputStreamReader inputStream;
+    private static BufferedReader bufferedReader;
+    private static String message = null;
 	Socket theClient;
 	private static Hashtable<String, Integer> items = Server.items;
 	private static OrderLog ol = new OrderLog();
@@ -76,18 +76,15 @@ public class MultithreadedServer extends Thread{
 					if(i!=(Server.ID-1)){
 						LamportClientThread t = new LamportClientThread(Server.addresses.get(i), Server.ports.get(i), i);
 						Server.request.set(i,true); //send message to this server
-						System.out.println("send a request to server " +i);
 						t.start();
 						System.out.println("deadlock checkpoint 3");
-						System.out.println(t.isAlive() + " " + i + "=server thread connection status");
 					}
 				}
 				for(int i = 0;i<Server.numServers;i++){
 					System.out.println("deadlock checkpoint 3.5");
-					if(!Server.dead.get(i) && (i!=(Server.ID-1))){
-						System.out.println("deadlock when trying to contact server " + i);
+					System.out.println("deadlock when trying to contact server " + (i+1));
+					if(!Server.dead.get(i) && (i!=(Server.ID-1)))
 						while(Server.request.get(i) && !Server.dead.get(i));//waits for all threads connected to each server to send request
-					}	
 					System.out.println("deadlock checkpoint 4");
 				}
 				System.out.println("deadlock checkpoint 3005");

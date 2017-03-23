@@ -6,14 +6,14 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class LamportClientThread extends Thread{
-	private Socket s;
-	private InputStream input;
-    private OutputStream output;
-    private PrintStream printStream;
-    private InputStreamReader inputStream;
-    private BufferedReader bufferedReader;
-    private String message = null;
-    private boolean first=true;
+	private static Socket s;
+	private static InputStream input;
+    private static OutputStream output;
+    private static PrintStream printStream;
+    private static InputStreamReader inputStream;
+    private static BufferedReader bufferedReader;
+    private static String message = null;
+    private static boolean first=true;
     private int port;
     private String ip;
     private int sid;

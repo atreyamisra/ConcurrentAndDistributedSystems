@@ -12,12 +12,12 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class MultithreadedServer extends Thread{
-	private InputStream input;
-    private OutputStream output;
-    private PrintStream printStream;
-    private InputStreamReader inputStream;
-    private BufferedReader bufferedReader;
-    private String message = null;
+	private static InputStream input;
+    private static OutputStream output;
+    private static PrintStream printStream;
+    private static InputStreamReader inputStream;
+    private static BufferedReader bufferedReader;
+    private static String message = null;
 	Socket theClient;
 	private static Hashtable<String, Integer> items = Server.items;
 	private static OrderLog ol = new OrderLog();

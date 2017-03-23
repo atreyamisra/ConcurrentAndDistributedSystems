@@ -7,12 +7,12 @@ import java.util.*;
 
 public class Lamport extends Thread{
 	Socket theServer;
-	private InputStream input;
-    private OutputStream output;
-    private PrintStream printStream;
-    private InputStreamReader inputStream;
-    private BufferedReader bufferedReader;
-    private String message = null;
+	private static InputStream input;
+    private static OutputStream output;
+    private static PrintStream printStream;
+    private static InputStreamReader inputStream;
+    private static BufferedReader bufferedReader;
+    private static String message = null;
 	public Lamport(Socket s){
     	theServer = s;	
     }
