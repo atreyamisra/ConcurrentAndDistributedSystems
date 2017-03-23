@@ -19,7 +19,7 @@ public class MultithreadedServer extends Thread{
     private BufferedReader bufferedReader;
     private String message = null;
 	Socket theClient;
-	private static volatile Hashtable<String, Integer> items = Server.items;
+	private static Hashtable<String, Integer> items = Server.items;
 	private static OrderLog ol = new OrderLog();
     private static int myTimestamp = 0; //holds the time stamp for the current request
     

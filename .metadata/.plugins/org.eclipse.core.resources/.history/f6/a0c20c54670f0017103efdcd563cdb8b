@@ -37,7 +37,6 @@ public class LamportClientThread extends Thread{
         			requestCS();
             		Server.request.set(sid, false);
             		System.out.println("outputstream deadlock checkpoint 9 "+sid);
-            		
         		}
         		else{
         			System.out.println("outputstream deadlock checkpoint 1.5" +sid);
@@ -64,7 +63,6 @@ public class LamportClientThread extends Thread{
   			message = bufferedReader.readLine();
   			System.out.println("outputstream deadlock checkpoint 4 "+sid);
   		} catch(SocketTimeoutException ste){
-  			dead=true;
   		} catch (IOException e) {
   			e.printStackTrace();
   		}
@@ -120,6 +118,12 @@ public class LamportClientThread extends Thread{
       	}	
       	if(!message.equals("hello"))
       		alive = false;
+  	    if(alive)
+  			try {
+  				s.setSoTimeout(0);
+  			} catch (SocketException e) {
+  				e.printStackTrace();
+  			}
   	  return alive;
     }
 }

@@ -120,6 +120,12 @@ public class LamportClientThread extends Thread{
       	}	
       	if(!message.equals("hello"))
       		alive = false;
+//  	    if(alive)
+//  			try {
+//  				s.setSoTimeout(0);
+//  			} catch (SocketException e) {
+//  				e.printStackTrace();
+//  			}
   	  return alive;
     }
 }
