@@ -270,15 +270,6 @@ public class Client {
 	    		alive = false;
 	    		return alive;
 	    	}
-	    	else{
-	  		  try {
-					s.setSoTimeout(0);
-				} catch (SocketException e2) {
-					alive = false;
-					return alive;
-				}
-	    	}
-	    	
 	    	return alive;
   }
 

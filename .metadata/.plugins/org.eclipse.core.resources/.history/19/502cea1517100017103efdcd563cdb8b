@@ -26,6 +26,7 @@ public class Server {
 	public static volatile ArrayList<Boolean> dead  = new ArrayList<Boolean>();
 	public static volatile ArrayList<Boolean> request = new ArrayList<Boolean>();
     public static volatile ArrayList<Boolean> release = new ArrayList<Boolean>();
+    public static volatile ArrayList<Boolean> checkDeath = new ArrayList<Boolean>();
 	public static volatile Hashtable<String, Integer> nod=new Hashtable<String, Integer>();
     public static Semaphore s = new Semaphore(1, true);
     public static Semaphore t = new Semaphore(1, true);
@@ -74,7 +75,6 @@ public class Server {
 					dead.add(false);
 					request.add(false);
 					release.add(false);
-					checkDeath.add(false);
 				}
 				catch(Exception e){
 					inputOK = false;

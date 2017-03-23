@@ -4,7 +4,6 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.*;
-import java.util.concurrent.Semaphore;
 
 public class LamportClientThread extends Thread{
 	private Socket s;
@@ -14,13 +13,11 @@ public class LamportClientThread extends Thread{
     private InputStreamReader inputStream;
     private BufferedReader bufferedReader;
     private String message = null;
-    private static Semaphore remove = new Semaphore(1, true);
     private boolean first=true;
     private int port;
     private String ip;
     private int sid;
     private boolean dead = false;
-    private static volatile boolean firstRemoval = true;
     public LamportClientThread(String serverIP, int portNumber, int serverID){
     	ip = serverIP;
     	port=portNumber;

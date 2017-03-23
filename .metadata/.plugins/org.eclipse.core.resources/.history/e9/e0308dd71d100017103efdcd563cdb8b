@@ -57,11 +57,13 @@ public class ConnectionListener extends Thread{
 			
   			if(message.equals("hi")){
   				printStream.println(message);
+  				System.out.println("initial contact with client");
   				Thread t = new MultithreadedServer(s);
   				t.start();
   			}
   			else if(message.equals("hello")){
   				printStream.println(message);
+  				System.out.println("initial contact with another server");
 				Thread l = new Lamport(s);
 				l.start();
   			}

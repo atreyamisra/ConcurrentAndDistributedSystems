@@ -28,7 +28,7 @@ public class LamportClientThread extends Thread{
     }
     public void run(){
     	while(!dead){
-    		while(!Server.request.get(sid) && !Server.release.get(sid));
+    		while(!Server.request.get(sid) && !Server.release.get(sid) && !Server.checkDeath.get(sid));
     		if(Server.request.get(sid)){
         		if(checkServer()){
         			requestCS();
@@ -43,6 +43,24 @@ public class LamportClientThread extends Thread{
     		else if(Server.release.get(sid)){
     			releaseCS();
     			Server.release.set(sid, false);
+    		}
+    		else if(Server.checkDeath.get(sid)){
+    			if(!checkServer()){
+    				Server.dead.set(sid, true);
+    				try {
+    					remove.acquire();
+    				} catch (InterruptedException e1) {
+    					// TODO Auto-generated catch block
+    					e1.printStackTrace();
+    				}
+    				if(firstRemoval){
+    					Server.lamport.pollFirst();
+    					firstRemoval=false;
+    				}
+    				remove.release();
+    			}
+    			Server.checkDeath.set(sid, false);
+    			dead=true;
     		}
     	}
     }

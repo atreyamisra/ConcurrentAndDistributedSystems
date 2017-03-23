@@ -128,7 +128,7 @@ public class MultithreadedServer extends Thread{
     	m = m.trim();
     	if(!external)
     		Server.lamport.pollFirst();
-    	//System.out.println("CS Entered on: " + m);
+    	System.out.println("CS Entered on: " + m);
     	if(external)
     		System.out.print("externally");
     	String[] n = m.split(" ");
