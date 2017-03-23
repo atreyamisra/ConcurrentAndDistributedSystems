@@ -46,7 +46,7 @@ public class Lamport extends Thread{
 		if(message.equals("release")){
 			String tokens = Server.lamport.pollFirst();
 			String process = tokens.substring(tokens.indexOf(' ', tokens.indexOf(' ')+1)+1);
-			MultithreadedServer.processMessage(process, true);
+			MultithreadedServer.processMessage(process);
 			if(Server.lamport.size()!=0){
 				tokens = Server.lamport.peek();
 				String token[] = tokens.split(" ");

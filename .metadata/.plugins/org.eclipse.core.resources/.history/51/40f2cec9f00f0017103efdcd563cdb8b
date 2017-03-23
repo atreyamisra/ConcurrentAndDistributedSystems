@@ -26,6 +26,7 @@ public class LamportClientThread extends Thread{
     public void run(){
     	while(!dead){
     		while(!Server.request.get(sid) && !Server.release.get(sid));
+    		System.out.println(Server.request.get(sid));
     		if(Server.request.get(sid)){
         		if(checkServer()){
         			requestCS();

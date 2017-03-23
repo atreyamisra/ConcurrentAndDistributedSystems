@@ -47,6 +47,7 @@ public class MultithreadedServer extends Thread{
   	  				  }  
   	  			  }
   	  			  else{
+  	  				  System.out.println("deadlock checkpoint 1");
   	  				  askForCS();
   	  			  }
   		  }
@@ -63,6 +64,7 @@ public class MultithreadedServer extends Thread{
 			e1.printStackTrace();
 		}
     		Server.message=message;
+    		System.out.println("deadlock checkpoint 2");
     		
 			Server.clock.tick();
 			String requester = String.valueOf(Server.clock.getClock()) + " " + String.valueOf(Server.ID) + " " + Server.message;
@@ -74,32 +76,46 @@ public class MultithreadedServer extends Thread{
 					if(i!=(Server.ID-1)){
 						LamportClientThread t = new LamportClientThread(Server.addresses.get(i), Server.ports.get(i), i);
 						Server.request.set(i,true); //send message to this server
+						System.out.println("send a request to server " +i);
 						t.start();
+						System.out.println("deadlock checkpoint 3");
+						System.out.println(t.isAlive() + " " + i + "=server thread connection status");
 					}
 				}
 				for(int i = 0;i<Server.numServers;i++){
+					System.out.println("deadlock checkpoint 3.5");
 					if(!Server.dead.get(i) && (i!=(Server.ID-1))){
+						System.out.println("deadlock when trying to contact server " + i);
 						while(Server.request.get(i) && !Server.dead.get(i));//waits for all threads connected to each server to send request
 					}	
+					System.out.println("deadlock checkpoint 4");
 				}
+				System.out.println("deadlock checkpoint 3005");
 				Server.first=false;
 			}
 			else{
 				for(int i = 0;i<Server.numServers;i++){
 					Server.request.set(i, true); //signals threads that they can start sending the request
+					System.out.println("deadlock checkpoint 5");
 				}
 				for(int i = 0;i<Server.numServers;i++){
 					if(!Server.dead.get(i) && (i!=(Server.ID-1)))
 						while(Server.request.get(i) && !Server.dead.get(i)); //waits for all threads connected to each server sends request
+					System.out.println("deadlock checkpoint 6");
 				}
 			}
 
 			Server.s.release(); //allow other clients to ask for the CS
 			
+			System.out.println("important deadlock checkpoint, waiting to access CS");
 			while((Server.nod.get(requester)<Server.numAlive) && (!Server.top) && (!Server.lamport.peek().equals(requester))); //waits for all requests to bounce back, the server to notice top of linked list is its server, and that the command at top is associated with specific client
+			System.out.println("deadlock checkpoint 7");
 			Server.top=false;
-			String response=processMessage(message, false); //processes clients message and makes a string response
+			System.out.println(Server.ID+" "+ message);
+			String response=processMessage(message); //processes clients message and makes a string response
+			System.out.println(Server.ID+" "+ response);
 			printStream.println(response);// sends message back to client
+			System.out.println("deadlock checkpoint 8");
 			
 			try {
 				Server.t.acquire();
@@ -124,13 +140,10 @@ public class MultithreadedServer extends Thread{
 			}
 
     }
-    public synchronized static String processMessage(String m, boolean external){
+    public synchronized static String processMessage(String m){
     	m = m.trim();
-    	if(!external)
-    		Server.lamport.pollFirst();
+    	Server.lamport.pollFirst();
     	System.out.println("CS Entered on: " + m);
-    	if(external)
-    		System.out.print("externally");
     	String[] n = m.split(" ");
     	if(n[0].equals("purchase")){
     		String state = editInventory(n[2],Integer.valueOf(n[3]), true, false);
