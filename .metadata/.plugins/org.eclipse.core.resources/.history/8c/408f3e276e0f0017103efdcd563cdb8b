@@ -216,8 +216,6 @@ public class Client {
   
   private static boolean checkServer(int index){
 	  boolean alive = true;
-	  if (index==port.length)
-		  System.out.println("NO MORE SERVERS! YOU ARE NOT TESTING THIS PROPERLY!");
 		  try {
 				s=new Socket(ip[index], port[index]);
 		  } catch (UnknownHostException e) {
