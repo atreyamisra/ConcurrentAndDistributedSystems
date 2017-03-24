@@ -1,4 +1,4 @@
-//am73676_sr39533
+
 public class LogicalClock implements Comparable<LogicalClock>{
 	
 	int clock;
