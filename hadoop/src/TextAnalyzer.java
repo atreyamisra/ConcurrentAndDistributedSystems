@@ -16,6 +16,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Map;
 
 // Do not change the signature of this class
@@ -32,9 +33,18 @@ public class TextAnalyzer extends Configured implements Tool {
             String line = value.toString().toLowerCase(); //convert the Text input into a lower case string
             
             String[] words = line.split("\\W+"); //split all the words into an array
+		
+	    ArrayList<String> times = new ArrayList<String>(); //holds each unique word in the line
 
             for(int i = 0; i < words.length; i++){
                 if(words[i].length() > 0){ //check if the word is legitimate
+			
+		    if(times.contains(words[i])){
+                        continue;
+                    }
+
+                    times.add(words[i]);	
+			
                     Tuple contextWords = new Tuple(); //create the Tuple that will hold the context words and counts for this query word
 
                     for(int j = 0; j < words.length; j++){ //iterate, treating the current word as the context word
