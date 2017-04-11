@@ -34,26 +34,24 @@ public class TextAnalyzer extends Configured implements Tool {
             
             String[] words = line.split("\\W+"); //split all the words into an array
 		
-	    ArrayList<String> times = new ArrayList<String>(); //holds each unique word in the line
+            ArrayList<String> times = new ArrayList<String>(); //holds each unique word in the line
 
             for(int i = 0; i < words.length; i++){
                 if(words[i].length() > 0){ //check if the word is legitimate
 			
-		    if(times.contains(words[i])){
-                        continue;
-                    }
+                	if(!times.contains(words[i])){ //if the current context word has not been seen yet, the create a new tuple for it
+                		times.add(words[i]); //first, add the word to the list
+                		
+                		Tuple contextWords = new Tuple(); //create the Tuple that will hold the context words and counts for this query word
 
-                    times.add(words[i]);	
-			
-                    Tuple contextWords = new Tuple(); //create the Tuple that will hold the context words and counts for this query word
+                		for(int j = 0; j < words.length; j++){ //iterate, treating the current word as the context word
+                			if(i != j && words[j].length() > 0){ //check if the context word is not the query word and is legit
+                				contextWords.add(words[j]); //add the current context word to the tuple
+                			}
+                		}
 
-                    for(int j = 0; j < words.length; j++){ //iterate, treating the current word as the context word
-                        if(i != j && words[j].length() > 0){ //check if the context word is not the query word and is legit
-                            contextWords.add(words[j]); //add the current context word to the tuple
-                        }
-                    }
-
-                    context.write(new Text(words[i]), contextWords); //write out the final <query word, {context words and counts}> key-value pair
+                		context.write(new Text(words[i]), contextWords); //write out the final <query word, {context words and counts}> key-value pair
+                	}
                 }
             }
         }
@@ -81,7 +79,7 @@ public class TextAnalyzer extends Configured implements Tool {
 
             Tuple contextWords = new Tuple(); //the Tuple that will aggregate Tuples from all lines for the current context word
 
-            //iterate through the individual line tuples and ombine them together into contextWords
+            //iterate through the individual line tuples and combine them together into contextWords
             for(Tuple t : queryTuples){
                 for(Writable query : t.getMap().keySet()){
                     contextWords.add((Text)query, (IntWritable)t.getMap().get(query)); //add each query word into the aggregate tuple
@@ -158,8 +156,8 @@ public class TextAnalyzer extends Configured implements Tool {
         }
 
         public void add(String word){
-            if(map.containsKey(word)){ //if the word to enter already exists in the set, just increment count
-                map.put(new Text(word), new IntWritable(((IntWritable)map.get(word)).get() + 1));
+            if(map.containsKey(new Text(word))){ //if the word to enter already exists in the set, just increment count
+                map.put(new Text(word), new IntWritable(((IntWritable)map.get(new Text(word))).get() + 1));
             }
             else{
                 map.put(new Text(word), new IntWritable(1));
