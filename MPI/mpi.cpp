@@ -120,9 +120,7 @@ int main(int argc, char** argv){
 
             MPI_Send(&i, 1, MPI_INT, target, 2, MPI_COMM_WORLD); //the row number
 
-            MPI_Send(&mat[i], numCols, MPI_INT, target, 3, MPI_COMM_WORLD); //the row itself
-              std::cout << "\nmat:\n";
-              std::cout << mat[i][0];
+            MPI_Send(&mat[i][0], numCols, MPI_INT, target, 3, MPI_COMM_WORLD); //the row itself
               
           }
         }
@@ -186,7 +184,6 @@ int main(int argc, char** argv){
 
     //if we are no the root process, wait for inputs and process them
     else{
-        std::cout << "hello\n";
       //First grab the size of the vector
       int cols;
 
@@ -199,8 +196,6 @@ int main(int argc, char** argv){
       MPI_Recv(&vec[0], cols, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
       //Next grab the row number and row and process them, then send them back
-        std::cout << "\nvec[0]:\n";
-        std::cout << vec[0];
       int rowNum;
       int res;
       vector<int> row;
@@ -208,8 +203,7 @@ int main(int argc, char** argv){
 
       while(1){
         MPI_Recv(&rowNum, 1, MPI_INT, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE); //grab the row number
-          std::cout << "\nrowNum:\n";
-          std::cout << rowNum;
+
         if(rowNum == -1){
           break;
         }
@@ -217,12 +211,7 @@ int main(int argc, char** argv){
         MPI_Recv(&row[0], cols, MPI_INT, 0, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE); //grab the row itself
         
         res = vectorMult(row, vec);
-          std::cout << "\nres:\n";
-          std::cout << res;
-          std::cout << "\nrow[0]:\n";
-          std::cout << row[0];
-          std::cout << "\n";
-          std::cout << ("")
+
         MPI_Send(&res, 1, MPI_INT, 0, rowNum, MPI_COMM_WORLD); //send the dot product back to the root
           
           row.clear();
