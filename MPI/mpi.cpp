@@ -48,28 +48,33 @@ int main(int argc, char** argv){
   		  in >> numRows;
     
   		  for(int i = 0; i <= numRows; i++){
+              
             std::getline(in, s);
-            
-            matrix.push_back(IntVector());
-            IntVector& vBack = matrix.back();
+              if(i==0){
+                  continue;
+              }
+            mat.push_back(IntVector());
+            IntVector& vBack = mat.back();
             
             istringstream ss(s);
             
             copy(istream_iterator<int>(ss), istream_iterator<int>(), back_inserter(vBack));
+
         }
 
-        numCols = matrix[0].size();
+        numCols = mat[0].size();
     
   		  ifstream in2("vector.txt");
     
   		  int i;
     
   		  while(in2 >> i){
-            vect.push_back(i);
-        }
+            vec.push_back(i);
+          }
 
         //fails if the sizes do not match
-        if(numCols != vect.size()){
+        if(numCols != vec.size()){
+            MPI_Finalize();
           return 0;
         }
     
@@ -116,6 +121,9 @@ int main(int argc, char** argv){
             MPI_Send(&i, 1, MPI_INT, target, 2, MPI_COMM_WORLD); //the row number
 
             MPI_Send(&mat[i], numCols, MPI_INT, target, 3, MPI_COMM_WORLD); //the row itself
+              std::cout << "\nmat:\n";
+              std::cout << mat[i][0];
+              
           }
         }
 
@@ -152,7 +160,7 @@ int main(int argc, char** argv){
 
         FILE *out = fopen("result.txt", "w");
         if (out == NULL) {
-            printf("ERROR - CAN'T FIND OUTFILE", OUTFILE);
+            printf("ERROR - CAN'T FIND OUTFILE");
         }
 
         for (i = 0; i < numRows; i++) {
@@ -178,7 +186,7 @@ int main(int argc, char** argv){
 
     //if we are no the root process, wait for inputs and process them
     else{
-
+        std::cout << "hello\n";
       //First grab the size of the vector
       int cols;
 
@@ -191,6 +199,8 @@ int main(int argc, char** argv){
       MPI_Recv(&vec[0], cols, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
       //Next grab the row number and row and process them, then send them back
+        std::cout << "\nvec[0]:\n";
+        std::cout << vec[0];
       int rowNum;
       int res;
       vector<int> row;
@@ -198,16 +208,25 @@ int main(int argc, char** argv){
 
       while(1){
         MPI_Recv(&rowNum, 1, MPI_INT, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE); //grab the row number
-
+          std::cout << "\nrowNum:\n";
+          std::cout << rowNum;
         if(rowNum == -1){
           break;
         }
 
         MPI_Recv(&row[0], cols, MPI_INT, 0, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE); //grab the row itself
-
+        
         res = vectorMult(row, vec);
-
+          std::cout << "\nres:\n";
+          std::cout << res;
+          std::cout << "\nrow[0]:\n";
+          std::cout << row[0];
+          std::cout << "\n";
+          std::cout << ("")
         MPI_Send(&res, 1, MPI_INT, 0, rowNum, MPI_COMM_WORLD); //send the dot product back to the root
+          
+          row.clear();
+          row.resize(cols);
       }
 
       //free all the references
@@ -216,8 +235,6 @@ int main(int argc, char** argv){
 
     }
 
-
-  MPI_Finalize();
     
-  return 0;
+  MPI_Finalize();
 }
