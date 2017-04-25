@@ -1,0 +1,10 @@
+import java.util.*;
+
+public class HelloWorld{
+	public static void main(String args[]){
+		String Welcome = "Hello World";
+		Welcome = "Dogs are cool";
+		Welcome = Welcome + " I'm fucking awesome";
+		System.out.println(Welcome);
+	}
+}

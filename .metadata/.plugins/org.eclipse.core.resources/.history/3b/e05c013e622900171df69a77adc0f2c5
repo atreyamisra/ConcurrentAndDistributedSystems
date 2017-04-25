@@ -1,0 +1,49 @@
+import java.util.*;
+
+public class HelloWorld{
+	public static void main(String args[]){
+		String Welcome = "Hello World";
+		Welcome = "Dogs are cool";
+		Welcome = Welcome + " I'm fucking awesome";
+		int yearOfBirth = 97;
+		System.out.println(Welcome);
+		Welcome = Welcome + " I'm " + yearOfBirth + " years old.";
+		System.out.println(Welcome);
+		String[][] array = new String[10][10];
+		array[0][0] = "yo";
+		System.out.println(array[0][0]);
+		int[] arraytwo = new int[1];
+		arraytwo[0] = 9;
+		System.out.println(arraytwo[0]);
+		int[] sumThis = new int[3];
+		sumThis[0] = 5;
+		sumThis[1] = 9;
+		sumThis[2] = 4;
+		int sumTotal;
+		sumTotal = sumThis[0] + sumThis[1] + sumThis[2];
+		System.out.println(sumTotal);
+		int[] sumThis2 = new int[100];
+		int putInArray = 13;
+		for(int i = 0; i< sumThis2.length; i=i+1){
+			sumThis2[i]=i;
+		}
+		System.out.println(sumThis2[50]);
+		int sum = 0;
+		int KatherineIsStupid = 0;
+		int[] hi = new int[2];
+		hi[0] = 5;
+		hi[1] = 15;
+		KatherineIsStupid = hi[0] + KatherineIsStupid;
+		KatherineIsStupid = hi[1] + KatherineIsStupid;
+		System.out.println("Katherine is stupid = " + KatherineIsStupid);
+		for(int i=0;i<sumThis2.length;i=i+1){
+			sum = sumThis2[i]+ sum;
+		}	
+		System.out.println(sum);
+		for(int i=0;i<sumThis2.length;i++){
+			sum=sumThis2[i]+sum*.5;
+		}
+		System.out.print(sum);
+		
+	}
+}

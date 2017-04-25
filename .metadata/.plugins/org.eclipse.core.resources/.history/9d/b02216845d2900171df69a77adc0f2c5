@@ -1,0 +1,12 @@
+import java.util.*;
+
+public class HelloWorld{
+	public static void main(String args[]){
+		String Welcome = "Hello World";
+		Welcome = "Dogs are cool";
+		Welcome = Welcome + " I'm fucking awesome";
+		int yearOfBirth = 97;
+		System.out.println(Welcome);
+		Welcome = Welcome + " I'm " + yearOfBirth + " years old.";
+	}
+}

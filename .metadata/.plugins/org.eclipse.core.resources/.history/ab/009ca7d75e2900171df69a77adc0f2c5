@@ -1,0 +1,19 @@
+import java.util.*;
+
+public class HelloWorld{
+	public static void main(String args[]){
+		String Welcome = "Hello World";
+		Welcome = "Dogs are cool";
+		Welcome = Welcome + " I'm fucking awesome";
+		int yearOfBirth = 97;
+		System.out.println(Welcome);
+		Welcome = Welcome + " I'm " + yearOfBirth + " years old.";
+		System.out.println(Welcome);
+		String[][] array = new String[10][10];
+		array[0][0] = "yo";
+		System.out.println(array[0][0]);
+		int[] arraytwo = new int[1];
+		arraytwo[0] = 9;
+		System.out.println(arraytwo[0]);
+	}
+}
